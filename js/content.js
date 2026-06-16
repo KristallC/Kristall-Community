@@ -106,7 +106,7 @@ async function buildGameTemplatePage() {
             featuresBlock.style.display = 'none'; 
         }
 
-        // УМНОЕ СКРЫТИЕ И РЕНДЕРИНГ СКРИНШОТОВ (ТЕПЕРЬ ПОД ТРЕЙЛЕРОМ НАВЕРХУ!)
+        // УМНОЕ СКРЫТИЕ И РЕНДЕРИНГ СКРИНШОТОВ (ПОД ТРЕЙЛЕРОМ НАВЕРХУ!)
         const scrBlock = document.getElementById('screenshots-block');
         const scrContainer = document.getElementById('screenshots-container');
         if (game.screenshots && game.screenshots.length > 0 && scrBlock && scrContainer) {
