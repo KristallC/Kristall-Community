@@ -28,61 +28,93 @@ function applyAvatarBorderColor() {
     
     // Считываем выбор пользователя (или ставим дефолтный циановый неон)
     const selection = currentUser.avatar_color || "#22d3ee";
+    const isAnimation = selection.startsWith("decor-");
     
-    // Находим все аватарки в шапке сайта и в личном кабинете
-    const targets = document.querySelectorAll('#prof-avatar-box img, #prof-avatar-box svg, #header-avatar-img-pc img, #header-avatar-img-pc svg, #header-avatar-img-mobile img, #header-avatar-img-mobile svg');
+    // 1. НАСТРОЙКА БЛОКОВ (Страница профиля и Шапка сайта)
+    // Находим сами контейнеры (div), на которые правильно вешать CSS-анимации украшений
+    const containers = document.querySelectorAll('#prof-avatar-box, #header-avatar-img-pc, #header-avatar-img-mobile');
 
-    targets.forEach(el => {
-        if (!el) return;
+    containers.forEach(box => {
+        if (!box) return;
         
-        // Сбрасываем старые анимации и рамки перед наложением новых
-        el.className = ''; 
-        el.style.boxShadow = 'none';
-        el.style.animation = 'none';
+        // Сбрасываем старые анимации с контейнера
+        box.className = ''; 
+        box.style.boxShadow = 'none';
+        box.style.border = 'none';
+        box.style.position = 'relative'; // Чтобы анимация цеплялась за контейнер
+        
+        // Находим картинку или SVG внутри этого контейнера
+        const innerEl = box.querySelector('img') || box.querySelector('svg');
 
-        // Проверяем выбранный аксессуар и включаем нужный CSS-класс
-        if (selection === 'decor-fire') { el.classList.add('decor-fire-animation'); } 
-        else if (selection === 'decor-cyber') { el.classList.add('decor-cyber-animation'); }
-        else if (selection === 'decor-gold') { el.classList.add('decor-gold-animation'); }
-        else if (selection === 'decor-emerald') { el.classList.add('decor-emerald-animation'); }
-        else if (selection === 'decor-ruby') { el.classList.add('decor-ruby-animation'); }
-        else if (selection === 'decor-crown') { el.classList.add('decor-crown-animation'); }
-        else if (selection === 'decor-ghost') { el.classList.add('decor-ghost-animation'); }
-        else if (selection === 'decor-matter') { el.classList.add('decor-matter-animation'); }
-        else if (selection === 'decor-pulse') { el.classList.add('decor-pulse-animation'); }
-        else {
-            // Если выбран обычный бесплатный цвет — просто красим границу
-            el.style.borderColor = selection;
+        if (isAnimation) {
+            // Если выбрана анимация — вешаем класс на ВНЕШНИЙ блок (div)
+            if (selection === 'decor-fire') { box.classList.add('decor-fire-animation'); } 
+            else if (selection === 'decor-cyber') { box.classList.add('decor-cyber-animation'); }
+            else if (selection === 'decor-gold') { box.classList.add('decor-gold-animation'); }
+            else if (selection === 'decor-emerald') { box.classList.add('decor-emerald-animation'); }
+            else if (selection === 'decor-ruby') { box.classList.add('decor-ruby-animation'); }
+            else if (selection === 'decor-crown') { box.classList.add('decor-crown-animation'); }
+            else if (selection === 'decor-ghost') { box.classList.add('decor-ghost-animation'); }
+            else if (selection === 'decor-matter') { box.classList.add('decor-matter-animation'); }
+            else if (selection === 'decor-pulse') { box.classList.add('decor-pulse-animation'); }
             
-            // Если у пользователя в инвентаре лежит Аура — добавляем неоновое свечение к цвету
+            // Саму картинку внутри просто аккуратно скругляем без рамок
+            if (innerEl) {
+                innerEl.style.border = 'none';
+                innerEl.style.boxShadow = 'none';
+            }
+        } else {
+            // Если выбран обычный бесплатный цвет — красим рамку самого контейнера
+            box.style.borderRadius = '50%';
+            box.style.border = `3px solid ${selection}`;
+            
+            // Если у пользователя в инвентаре лежит Аура — добавляем неоновое свечение к контейнеру
             if (currentUser.inventory && currentUser.inventory.includes("💥 Неоновая Аура")) {
-                el.style.boxShadow = `0 0 15px ${selection}, inset 0 0 10px ${selection}`;
+                box.style.boxShadow = `0 0 15px ${selection}`;
+            }
+            if (innerEl) {
+                innerEl.style.border = 'none';
+                innerEl.style.boxShadow = 'none';
             }
         }
     });
 
-    // ИСПРАВЛЕНО: Теперь точечно находим и красим рамку в боковом виджете на главной странице!
+    // 2. НАСТРОЙКА БОКОВОГО ВИДЖЕТА Kristall ID НА ГЛАВНОЙ СТРАНИЦЕ
     const sideAvatarContainer = document.querySelector('#main-side-profile div');
     if (sideAvatarContainer) {
-        // Очищаем стили контейнера виджета
+        // Очищаем старые классы и сбрасываем стили контейнера
         sideAvatarContainer.className = '';
         sideAvatarContainer.style.boxShadow = 'none';
-        sideAvatarContainer.style.animation = 'none';
-        sideAvatarContainer.style.borderColor = 'transparent';
+        sideAvatarContainer.style.border = 'none';
+        sideAvatarContainer.style.position = 'relative';
+        sideAvatarContainer.style.backgroundColor = 'transparent'; // Убираем возможный черный фон блока
 
-        if (selection === 'decor-fire') {
-            sideAvatarContainer.classList.add('decor-fire-animation');
-        } else if (selection === 'decor-cyber') {
-            sideAvatarContainer.classList.add('decor-cyber-animation');
-        } else if (selection === 'decor-gold') {
-            sideAvatarContainer.classList.add('decor-gold-animation');
-        } else if (selection === 'decor-emerald') {
-            sideAvatarContainer.classList.add('decor-emerald-animation');
-        } else if (selection === 'decor-ruby') {
-            sideAvatarContainer.classList.add('decor-ruby-animation');
+        // Вычисляем базовый цвет для SVG-силуэта (если у пользователя выбран неон, красим в него, иначе в белый)
+        let svgFillColor = isAnimation ? "#22d3ee" : selection;
+        const MID_SVG_AVATAR = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="48" height="48" fill="${svgFillColor}" style="opacity: 0.9; display: block; margin: auto;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>`;
+
+        // Проверяем: если внутри блока НЕТ картинки с аватаркой (то есть там пусто или стоит старый SVG)
+        const hasImg = sideAvatarContainer.querySelector('img');
+        if (!hasImg) {
+            // Принудительно вставляем красивую цветную заглушку, чтобы фон не был черным
+            sideAvatarContainer.innerHTML = MID_SVG_AVATAR;
+        }
+
+        if (isAnimation) {
+            // Включаем нужный CSS-класс анимации для Kristall ID
+            if (selection === 'decor-fire') { sideAvatarContainer.classList.add('decor-fire-animation'); } 
+            else if (selection === 'decor-cyber') { sideAvatarContainer.classList.add('decor-cyber-animation'); }
+            else if (selection === 'decor-gold') { sideAvatarContainer.classList.add('decor-gold-animation'); }
+            else if (selection === 'decor-emerald') { sideAvatarContainer.classList.add('decor-emerald-animation'); }
+            else if (selection === 'decor-ruby') { sideAvatarContainer.classList.add('decor-ruby-animation'); }
+            else if (selection === 'decor-crown') { sideAvatarContainer.classList.add('decor-crown-animation'); }
+            else if (selection === 'decor-ghost') { sideAvatarContainer.classList.add('decor-ghost-animation'); }
+            else if (selection === 'decor-matter') { sideAvatarContainer.classList.add('decor-matter-animation'); }
+            else if (selection === 'decor-pulse') { sideAvatarContainer.classList.add('decor-pulse-animation'); }
         } else {
-            // Если выбрана обычная обводка — красим её в цвет звания
-            sideAvatarContainer.style.borderColor = selection;
+            // Если выбрана обычная обводка
+            sideAvatarContainer.style.borderRadius = '50%';
+            sideAvatarContainer.style.border = `3px solid ${selection}`;
             if (currentUser.inventory && currentUser.inventory.includes("💥 Неоновая Аура")) {
                 sideAvatarContainer.style.boxShadow = `0 0 15px ${selection}`;
             }
@@ -92,50 +124,114 @@ function applyAvatarBorderColor() {
 
 // Функция обновления шапки и цветов никнеймов (ПК и Мобилки)
 function updateHeaderProfile() {
+    let neonColor = "#ffffff"; 
+
+    // Берем текущий цвет неона из профиля пользователя
+    if (currentUser && currentUser.avatar_color) {
+        if (currentUser.avatar_color.startsWith('#')) {
+            neonColor = currentUser.avatar_color;
+        } else {
+            neonColor = "#22d3ee"; // Цвет по умолчанию для анимаций
+        }
+    }
+
+    const DEFAULT_SVG_AVATAR = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="32" height="32" fill="${neonColor}" style="opacity: 0.9; display: block; margin: auto;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>`;
+
+    const avatarBox = document.getElementById('header-avatar-img-pc');
+    const avatarBoxMobile = document.getElementById('header-avatar-img-mobile');
     const headerUsername = document.getElementById('header-username');
     const headerUsernameMobile = document.getElementById('header-username-mobile');
-    const avatarPc = document.getElementById('header-avatar-img-pc');
-    const avatarMobile = document.getElementById('header-avatar-img-mobile');
-    
+
     if (!headerUsername) return;
 
     if (currentUser) {
-        let nameColor = "white"; 
-
-        if (currentUser.clearance_level === 2) { nameColor = "#f97316"; } 
-        else if (currentUser.clearance_level === 3) { nameColor = "#10b981"; } 
-        else if (currentUser.clearance_level === 4) { nameColor = "#a855f7"; } 
-        else if (currentUser.clearance_level === 5) { nameColor = "#ef4444"; } 
-        else if (currentUser.clearance_level === 6) { nameColor = "#22d3ee"; } 
+        let nameColor = "white";
+        if (currentUser.clearance_level === 2) { nameColor = "#f3a316"; }
+        else if (currentUser.clearance_level === 3) { nameColor = "#0055ff"; }
+        else if (currentUser.clearance_level === 4) { nameColor = "#b121ff"; }
+        else if (currentUser.clearance_level === 5) { nameColor = "#ff213c"; }
 
         headerUsername.innerText = currentUser.username;
-        headerUsername.style.color = nameColor; 
+        headerUsername.style.color = nameColor;
 
         if (headerUsernameMobile) {
             headerUsernameMobile.innerText = currentUser.username;
             headerUsernameMobile.style.color = nameColor;
         }
 
-        const avatarHTML = (currentUser.avatar_url && currentUser.avatar_url.startsWith('http')) 
-            ? `<img src="${currentUser.avatar_url}" style="width:32px; height:32px; border-radius:50%; border:2px solid #22d3ee; object-fit:cover;">`
+        // Если у пользователя есть аватарка-картинка, мы СРАЗУ вшиваем ей рамку с его цветом неона!
+        const hasCustomAvatar = currentUser.avatar_url && currentUser.avatar_url.startsWith("http");
+        const imgStyle = hasCustomAvatar 
+            ? `width:32px; height:32px; border-radius:50%; object-fit:cover; display:block; border: 2px solid ${neonColor}; box-shadow: 0 0 8px ${neonColor};`
+            : "";
+
+        const avatarHTML = hasCustomAvatar 
+            ? `<img src="${currentUser.avatar_url}" style="${imgStyle}">`
             : DEFAULT_SVG_AVATAR;
 
-        if (avatarPc) avatarPc.innerHTML = avatarHTML;
-        if (avatarMobile) avatarMobile.innerHTML = avatarHTML;
-    } else {
-        headerUsername.innerText = 'Гость';
-        headerUsername.style.color = 'white';
-        if (headerUsernameMobile) {
-            headerUsernameMobile.innerText = 'Гость';
-            headerUsernameMobile.style.color = 'white';
+        if (avatarBox) {
+            avatarBox.innerHTML = avatarHTML;
+            avatarBox.className = ''; 
+            avatarBox.style.borderRadius = "50%";
+            
+            // Если надет декор (например, корона), вешаем класс анимации
+            if (currentUser.avatar_color && currentUser.avatar_color.startsWith('decor-')) {
+                avatarBox.classList.add(currentUser.avatar_color);
+                // Для анимаций убираем стандартный неон
+                const imgInside = avatarBox.querySelector('img');
+                if (imgInside) {
+                    imgInside.style.border = "none";
+                    imgInside.style.boxShadow = "none";
+                }
+            }
         }
-        if (avatarPc) avatarPc.innerHTML = DEFAULT_SVG_AVATAR;
-        if (avatarMobile) avatarMobile.innerHTML = DEFAULT_SVG_AVATAR;
+        
+        if (avatarBoxMobile) {
+            avatarBoxMobile.innerHTML = avatarHTML;
+            avatarBoxMobile.className = '';
+            avatarBoxMobile.style.borderRadius = "50%";
+            
+            if (currentUser.avatar_color && currentUser.avatar_color.startsWith('decor-')) {
+                avatarBoxMobile.classList.add(currentUser.avatar_color);
+                const imgInsideMobile = avatarBoxMobile.querySelector('img');
+                if (imgInsideMobile) {
+                    imgInsideMobile.style.border = "none";
+                    imgInsideMobile.style.boxShadow = "none";
+                }
+            }
+        }
+
+        // Вызываем твою системную функцию обводки для подстраховки
+        if (typeof applyAvatarBorderColor === 'function') {
+            applyAvatarBorderColor();
+        }
+
+    } else {
+        // Код для Гостя
+        if (headerUsername) {
+            headerUsername.innerText = "Гость";
+            headerUsername.style.color = "white";
+        }
+        const GUEST_SVG = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="32" height="32" fill="#ffffff" style="opacity: 0.8; display: block; margin: auto;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>`;
+
+        if (avatarBox) {
+            avatarBox.innerHTML = GUEST_SVG;
+            avatarBox.className = ''; 
+            avatarBox.style.border = "none";
+            avatarBox.style.boxShadow = "none";
+        }
+        if (avatarBoxMobile) {
+            avatarBoxMobile.innerHTML = GUEST_SVG;
+            avatarBoxMobile.className = '';
+            avatarBoxMobile.style.border = "none";
+            avatarBoxMobile.style.boxShadow = "none";
+        }
     }
 }
 
 // Заполнение личного кабинета (profile.html)
 function buildProfilePage() {
+    const DEFAULT_SVG_LARGE = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="128" height="128" fill="#ffffff" style="opacity: 0.8;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>`;
     const profName = document.getElementById('prof-username');
     if (!profName) return; 
 
@@ -160,9 +256,42 @@ function buildProfilePage() {
     
     const avatarBox = document.getElementById('prof-avatar-box');
     if (avatarBox) {
-        avatarBox.innerHTML = (currentUser.avatar_url && currentUser.avatar_url.startsWith('http')) 
-            ? `<img src="${currentUser.avatar_url}" style="width:80px; height:80px; border-radius:50%; object-fit:cover;">`
-            : DEFAULT_SVG_LARGE;
+        avatarBox.className = ''; 
+        
+        // Задаем размеры и позиционирование, чтобы анимации не улетали
+        avatarBox.style.width = "80px";
+        avatarBox.style.height = "80px";
+        avatarBox.style.borderRadius = "50%";
+        avatarBox.style.margin = "0 auto 15px auto";
+        avatarBox.style.display = "flex";
+        avatarBox.style.alignItems = "center";
+        avatarBox.style.justifyContent = "center";
+        
+        // ВАЖНО: relative позволяет украшениям цепляться прямо за этот круг!
+        avatarBox.style.position = "relative"; 
+
+        let currentColor = currentUser.avatar_color || "#22d3ee";
+        let isAnimation = currentColor.startsWith("decor-");
+
+        let svgFillColor = isAnimation ? "#22d3ee" : currentColor;
+        const DYNAMIC_SVG_LARGE = `<svg xmlns="http://w3.org" viewBox="0 0 24 24" width="48" height="48" fill="${svgFillColor}" style="opacity: 0.9; display: block;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>`;
+
+        // Для картинок делаем overflow: hidden, чтобы края не вылезали за круг
+        if (currentUser.avatar_url && currentUser.avatar_url.startsWith('http')) {
+            avatarBox.innerHTML = `<img src="${currentUser.avatar_url}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;">`;
+        } else {
+            avatarBox.innerHTML = DYNAMIC_SVG_LARGE;
+        }
+
+        if (!isAnimation) {
+            avatarBox.style.border = `3px solid ${currentColor}`;
+            avatarBox.style.boxShadow = `0 0 15px ${currentColor}`;
+        } else {
+            // Добавляем класс анимации (например, .decor-crown)
+            avatarBox.classList.add(currentColor);
+            avatarBox.style.border = "none";
+            avatarBox.style.boxShadow = "none";
+        }
     }
 
     document.getElementById('prof-level').innerText = currentUser.level;
