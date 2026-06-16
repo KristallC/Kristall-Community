@@ -17,6 +17,18 @@
         .product-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #1f2937; padding-top: 12px; }
         .product-price { color: #10b981; font-weight: bold; font-size: 14px; display: flex; align-items: center; gap: 4px; }
         .coin-icon { display: inline-block; width: 10px; height: 10px; background-color: #f59e0b; border-radius: 50%; box-shadow: 0 0 6px #f59e0b; }
+
+        /* НАШ ОГНЕННЫЙ ЭФФЕКТ ДЛЯ КНОПКИ ОТМЕНЫ В МАРКЕТПЛЕЙСЕ */
+        #modal-cancel-btn {
+            transition: all 0.2s ease-in-out !important; /* Делаем плавное наведение */
+        }
+        #modal-cancel-btn:hover {
+            background-color: rgba(239, 68, 68, 0.1) !important; /* Легкий красный фон */
+            border-color: #ef4444 !important;                    /* Сочная красная обводка */
+            color: #ef4444 !important;                           /* Красный текст */
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3) !important; /* Неоновое свечение */
+            cursor: pointer;                                     /* Иконка пальчика */
+        }
     </style>
 </head>
 <body>
