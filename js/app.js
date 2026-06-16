@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentUser.balance += 5; // +5 честных монет
             currentUser.last_daily_claim = now;
-            if (typeof addPlayerXp === 'function') addPlayerXp(5); // +5 опыта
+            currentUser.xp = (parseInt(currentUser.xp) || 0) + 5;
             
             localStorage.setItem('kristall_user', JSON.stringify(currentUser));
             showKristallToast("Ежедневный бонус получен! +5 монет, +5 XP.", "📆");
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentUser.balance += coinWin;
             currentUser.last_chest_claim = now;
-            if (typeof addPlayerXp === 'function') addPlayerXp(xpWin);
+            currentUser.xp = (parseInt(currentUser.xp) || 0) + xpWin;
 
             localStorage.setItem('kristall_user', JSON.stringify(currentUser));
             showKristallToast(`Вы получили: +${coinWin} монет, +${xpWin} XP`, "📦");
