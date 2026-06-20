@@ -82,12 +82,13 @@ async function buildProjectTemplatePage() {
     if (!document.getElementById('game-title')) return; 
 
     const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('project');
+    const projectId = urlParams.get('project') || urlParams.get('game');
     if (!projectId) { window.location.href = 'projects.html'; return; }
 
     try {
         if (allGamesData.length === 0) {
-            const response = await fetch(GAMES_URL);
+            // Добавляем ?v=, чтобы обойти любой кэш папок
+            const response = await fetch(GAMES_URL + '?v=' + new Date().getTime());
             allGamesData = await response.json();
         }
         const project = allGamesData.find(p => p.id === projectId);
@@ -121,16 +122,15 @@ async function buildProjectTemplatePage() {
                     btn.style.textAlign = "center";
                     btn.style.transition = "0.2s";
                     
-                    // ЦВЕТА КНОПОК: Синий - Windows, Зеленый - Android, Пурпурный - Веб-сайт
-                    let btnColor = '#10b981';      // По умолчанию зеленый (Android)
+                    let btnColor = '#10b981';
                     let btnHoverColor = '#059669';
                     
                     const osType = link.os?.toLowerCase();
-                    if (osType === 'windows') {
-                        btnColor = '#3b82f6';      // Синий для Windows
+                    if (osType === 'windows' || project.instruction_type === 'pc') {
+                        btnColor = '#3b82f6'; 
                         btnHoverColor = '#2563eb';
-                    } else if (osType === 'site') {
-                        btnColor = '#a855f7';      // Пурпурный для Сайтов
+                    } else if (osType === 'site' || project.type === 'site') {
+                        btnColor = '#a855f7'; 
                         btnHoverColor = '#8b5cf6';
                     }
                     
@@ -164,7 +164,7 @@ async function buildProjectTemplatePage() {
             });
         } else if (featuresBlock) { featuresBlock.style.display = 'none'; }
 
-        // ВОЗВРАЩЕНО НА 100%: Твои старые, горизонтальные скриншоты 200x120!
+        // ТВОЙ СТАРЫЙ, РОДНОЙ И 100% РАБОЧИЙ БЛОК СКРИНШОТОВ
         const scrBlock = document.getElementById('screenshots-block');
         const scrContainer = document.getElementById('screenshots-container');
         if (project.screenshots && project.screenshots.length > 0 && scrBlock && scrContainer) {
@@ -174,7 +174,7 @@ async function buildProjectTemplatePage() {
                 const img = document.createElement('img');
                 img.src = src;
                 
-                // ТВОИ РОДНЫЕ ИДЕАЛЬНЫЕ ГОРИЗОНТАЛЬНЫЕ НАСТРОЙКИ
+                // Твои оригинальные стили один в один
                 img.style.width = "200px";
                 img.style.height = "120px";
                 img.style.borderRadius = "8px";
