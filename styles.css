@@ -601,3 +601,17 @@ body {
 #kristall-toast.show {
     top: 25px; /* Выезжает сверху */
 }
+
+/* Стиль для современной кнопки-плюса */
+.add-project-btn:hover {
+    border-color: #22d3ee !important;
+    background-color: #111827 !important;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.25) !important;
+    transform: scale(1.05);
+}
+
+/* Добавим легкий фокус для инпута, чтобы сочетался */
+#search-input:focus {
+    border-color: #374151;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.02);
+}
