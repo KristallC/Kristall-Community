@@ -122,15 +122,15 @@ async function buildProjectTemplatePage() {
                     btn.style.transition = "0.2s";
                     
                     // ЦВЕТА КНОПОК: Синий - Windows, Зеленый - Android, Пурпурный - Веб-сайт
-                    let btnColor = '#10b981';
+                    let btnColor = '#10b981';      // По умолчанию зеленый (Android)
                     let btnHoverColor = '#059669';
                     
                     const osType = link.os?.toLowerCase();
-                    if (osType === 'windows' || project.instruction_type === 'pc') {
-                        btnColor = '#3b82f6'; 
+                    if (osType === 'windows') {
+                        btnColor = '#3b82f6';      // Синий для Windows
                         btnHoverColor = '#2563eb';
-                    } else if (osType === 'site' || project.type === 'site') {
-                        btnColor = '#a855f7'; 
+                    } else if (osType === 'site') {
+                        btnColor = '#a855f7';      // Пурпурный для Сайтов
                         btnHoverColor = '#8b5cf6';
                     }
                     
