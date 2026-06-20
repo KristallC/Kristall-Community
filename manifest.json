@@ -1,10 +1,17 @@
 {
   "short_name": "Kristall",
   "name": "KristallCommunity",
+  "description": "Официальная платформа KristallCommunity. Каталог мультиплатформенных игр и приложений, магазин украшений для аватара личного профиля и свежие новости Kristall.",
   "icons": [
     {
       "src": "favicon.png",
       "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "favicon.png",
+      "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     }
