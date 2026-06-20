@@ -1,5 +1,27 @@
 [
   {
+    "id": "kristallcommunity",
+    "title": "KristallCommunity - версии для установки",
+    "type": "app",
+    "platforms": ["Android"],
+    "developer": "Kristall",
+    "version": "1.0.0.0",
+    "price": "FREE",
+    "downloads": [
+      {"label": "Скачать APK", "url": "https://github.com/KristallC/Kristall-Community/releases/download/1.0.0.0/Kristall.apk", "os": "android", "size": "1.18 МБ"}
+    ],
+    "short_desc": "Версии KristallCommunity для скачивания.",
+    "full_desc": "KristallCommunity - веб-приложение сообщества Kristall, где вы можете: получать свежие новости со всего сообщества, пользоваться каталогом игр и приложений, скупать лимитированные украшения профиля в магазине и многое другое!",
+    "features": [
+      "Всегда под рукой: можно установить и открывать в 1 клик!"
+    ],
+    "requirements": "Android 7.0 и выше",
+    "show_instruction": true,
+    "instruction_type": "android",
+    "trailer_url": "",
+    "screenshots": []
+  },
+  {
     "id": "money-empire",
     "title": "Money Empire",
     "type": "game",
