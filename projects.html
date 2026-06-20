@@ -58,10 +58,16 @@
         <!-- ПАНЕЛЬ ПОИСКА И ФИЛЬТРОВ -->
         <div class="filter-panel" style="margin-bottom: 30px; display: flex; flex-direction: column; gap: 15px; font-family: sans-serif;">
 
-            <!-- Строка текстового поиска -->
-            <input type="text" id="search-input" placeholder="Поиск по названию проекта..." style="width: 100%; max-width: 400px; padding: 12px 15px; background-color: #1f2937; border: 1px solid #374151; color: white; border-radius: 8px; font-size: 15px; box-sizing: border-box; outline: none; transition: border-color 0.3s;">
+            <!-- Строка текстового поиска И СОВРЕМЕННАЯ КНОПКА-ПЛЮС (STEAM STYLE) -->
+            <div style="display: flex; align-items: center; gap: 12px; width: 100%; max-width: 650px;">
+                <input type="text" id="search-input" placeholder="Поиск по названию проекта..." style="flex-grow: 1; padding: 12px 15px; background-color: #070a12; border: 1px solid #1f2937; color: white; border-radius: 8px; font-size: 15px; outline: none; transition: border-color 0.3s; box-sizing: border-box;">
+                
+                <a href="https://forms.gle/2n77WhnxKWFDs7wy7" target="_blank" class="add-project-btn" title="Опубликовать свой проект" style="display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background-color: #070a12; border: 1px solid #1f2937; color: #22d3ee; border-radius: 8px; font-size: 20px; font-weight: bold; text-decoration: none; transition: 0.2s; box-shadow: 0 0 10px rgba(34, 211, 238, 0.02); flex-shrink: 0;">
+                    +
+                </a>
+            </div>
 
-            <!-- Кнопки-фильтры -->
+            <!-- Кнопки-фильтры (ОСТАЛИСЬ СТРОГО НА СВОЕМ МЕСТЕ!) -->
             <div class="filter-group" style="display: flex; flex-wrap: wrap; gap: 10px;">
                 <!-- Фильтры по типу -->
                 <button class="filter-btn active" data-filter-type="all">Все типы</button>
