@@ -32,29 +32,45 @@ async function loadProjectsPage() {
         
         gridContainer.innerHTML = ''; 
 
-        const filteredGames = allGamesData.filter(game => {
-            const matchesSearch = game.title.toLowerCase().includes(searchText);
-            const matchesType = (currentTypeFilter === 'all' || game.type === currentTypeFilter);
-            const matchesPlat = (currentPlatFilter === 'all' || game.platform.toLowerCase().includes(currentPlatFilter.toLowerCase()));
+        const filteredProjects = allGamesData.filter(project => {
+            const matchesSearch = project.title.toLowerCase().includes(searchText);
+            const matchesType = (currentTypeFilter === 'all' || project.type === currentTypeFilter);
+            
+            let matchesPlat = false;
+            if (currentPlatFilter === 'all') {
+                matchesPlat = true;
+            } else if (project.platforms && Array.isArray(project.platforms)) {
+                matchesPlat = project.platforms.some(p => p.toLowerCase() === currentPlatFilter.toLowerCase());
+            }
+
             return matchesSearch && matchesType && matchesPlat;
         });
 
-        if (filteredGames.length === 0) {
+        if (filteredProjects.length === 0) {
             gridContainer.innerHTML = '<p style="color: #9ca3af; grid-column: 1/-1;">Ничего не найдено.</p>';
             return;
         }
 
-        filteredGames.forEach(game => {
+        filteredProjects.forEach(project => {
             const card = document.createElement('a');
-            card.href = `project-template.html?game=${game.id}`;
+            // Переводим ссылку на правильный ?project=
+            card.href = `project-template.html?project=${project.id}`;
             card.className = 'game-card';
-            const badgeColor = game.type === 'pc' ? 'background-color: #3b82f6;' : 'background-color: #10b981;';
+            
+            let badgesHTML = '';
+            if (project.platforms && Array.isArray(project.platforms)) {
+                project.platforms.forEach(plat => {
+                    const color = plat.toLowerCase() === 'windows' ? '#3b82f6' : (plat.toLowerCase() === 'android' ? '#10b981' : '#a855f7');
+                    badgesHTML += `<span class="badge" style="background-color: ${color}; margin-left: 5px; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white;">${plat}</span>`;
+                });
+            }
+            
             card.innerHTML = `
-                <div class="card-header">
-                    <h3>${game.title}</h3>
-                    <span class="badge" style="${badgeColor}">${game.platform}</span>
+                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                    <h3 style="margin: 0; color: white; font-size: 18px;">${project.title}</h3>
+                    <div class="badges-wrapper">${badgesHTML}</div>
                 </div>
-                <p class="card-desc">${game.short_desc}</p>
+                <p class="card-desc">${project.short_desc}</p>
                 <div class="card-footer">Подробнее →</div>
             `;
             gridContainer.appendChild(card);
@@ -62,59 +78,103 @@ async function loadProjectsPage() {
     } catch (e) { console.error(e); }
 }
 
-async function buildGameTemplatePage() {
+async function buildProjectTemplatePage() {
     if (!document.getElementById('game-title')) return; 
 
     const urlParams = new URLSearchParams(window.location.search);
-    const gameId = urlParams.get('game');
-    if (!gameId) { window.location.href = 'projects.html'; return; }
+    const projectId = urlParams.get('project');
+    if (!projectId) { window.location.href = 'projects.html'; return; }
 
     try {
-        const response = await fetch(GAMES_URL);
-        const games = await response.json();
-        const game = games.find(g => g.id === gameId);
-        if (!game) return;
+        if (allGamesData.length === 0) {
+            const response = await fetch(GAMES_URL);
+            allGamesData = await response.json();
+        }
+        const project = allGamesData.find(p => p.id === projectId);
+        if (!project) return;
 
-        // Наполняем основные тексты (ОПИСАНИЕ СЕЙЧАС НЕ СКРЫВАЕТСЯ!)
-        document.title = `${game.title} - KristallCommunity`;
-        document.getElementById('game-title').innerText = game.title;
-        document.getElementById('game-short-desc').innerText = game.short_desc;
-        document.getElementById('game-full-desc').innerText = game.full_desc || "Описание проекта готовится к публикации.";
-        document.getElementById('game-platform').innerText = game.platform;
-        document.getElementById('game-version').innerText = game.version;
-        document.getElementById('game-developer').innerText = game.developer || "KristallCommunity";
+        // Заполнение текстов
+        document.title = `${project.title} - KristallCommunity`;
+        document.getElementById('game-title').innerText = project.title;
+        document.getElementById('game-short-desc').innerText = project.short_desc;
+        document.getElementById('game-full-desc').innerText = project.full_desc || "Описание проекта готовится к публикации.";
         
-        const downloadBtn = document.getElementById('game-download-btn');
-        if (downloadBtn) {
-            downloadBtn.href = game.download_path;
-            const actionWord = game.type === 'pc' ? 'Скачать для ПК' : 'Скачать APK';
-            downloadBtn.innerText = `${actionWord} (${game.price})`;
+        document.getElementById('game-platform').innerText = project.platforms ? project.platforms.join(', ') : '-';
+        document.getElementById('game-version').innerText = project.version;
+        document.getElementById('game-developer').innerText = project.developer || "KristallCommunity";
+        
+        // ВЫВОД НЕСКОЛЬКИХ РАЗНОЦВЕТНЫХ КНОПОК СКАЧИВАНИЯ
+        const oldDownloadBtn = document.getElementById('game-download-btn');
+        if (oldDownloadBtn) {
+            const downloadContainer = oldDownloadBtn.parentElement;
+            const nextSibling = oldDownloadBtn.nextSibling;
+            oldDownloadBtn.remove(); 
+            
+            if (project.downloads && project.downloads.length > 0) {
+                project.downloads.forEach(link => {
+                    const btn = document.createElement('a');
+                    btn.href = link.url;
+                    btn.target = "_blank";
+                    btn.className = "btn-download"; 
+                    btn.style.display = "block";
+                    btn.style.marginBottom = "10px";
+                    btn.style.textAlign = "center";
+                    btn.style.transition = "0.2s";
+                    
+                    // ЦВЕТА КНОПОК: Синий - Windows, Зеленый - Android, Пурпурный - Веб-сайт
+                    let btnColor = '#10b981';
+                    let btnHoverColor = '#059669';
+                    
+                    const osType = link.os?.toLowerCase();
+                    if (osType === 'windows' || project.instruction_type === 'pc') {
+                        btnColor = '#3b82f6'; 
+                        btnHoverColor = '#2563eb';
+                    } else if (osType === 'site' || project.type === 'site') {
+                        btnColor = '#a855f7'; 
+                        btnHoverColor = '#8b5cf6';
+                    }
+                    
+                    btn.style.backgroundColor = btnColor;
+                    btn.addEventListener('mouseenter', () => btn.style.backgroundColor = btnHoverColor);
+                    btn.addEventListener('mouseleave', () => btn.style.backgroundColor = btnColor);
+
+                    const fileWeight = link.size ? ` | ${link.size}` : ''; 
+                    btn.innerText = `${link.label || 'Скачать'} (${project.price}${fileWeight})`;
+                    
+                    downloadContainer.insertBefore(btn, nextSibling);
+                });
+            } else {
+                const unavailableBlock = document.createElement('div');
+                unavailableBlock.style.cssText = "text-align: left; padding: 15px; background-color: #1f2937; color: #9ca3af; border: 1px dashed #374151; border-radius: 8px; font-weight: bold; font-size: 14px; margin-bottom: 20px;";
+                unavailableBlock.innerText = "⚠️ В данный момент проект недоступен для скачивания.";
+                downloadContainer.insertBefore(unavailableBlock, nextSibling);
+            }
         }
 
-        // УМНОЕ СКРЫТИЕ КЛЮЧЕВЫХ ОСОБЕННОСТЕЙ
+        // Блоки особенностей
         const featuresBlock = document.getElementById('features-block');
         const featuresContainer = document.getElementById('game-features');
-        if (featuresContainer && game.features && game.features.length > 0) {
+        if (featuresContainer && project.features && project.features.length > 0) {
             if (featuresBlock) featuresBlock.style.display = 'block';
             featuresContainer.innerHTML = '';
-            game.features.forEach(feat => {
+            project.features.forEach(feat => {
                 const li = document.createElement('li');
                 li.innerHTML = `<span style="color: #10b981; font-weight: bold; margin-right: 5px;">✔</span> ${feat}`;
                 featuresContainer.appendChild(li);
             });
-        } else if (featuresBlock) {
-            featuresBlock.style.display = 'none'; 
-        }
+        } else if (featuresBlock) { featuresBlock.style.display = 'none'; }
 
-        // УМНОЕ СКРЫТИЕ И РЕНДЕРИНГ СКРИНШОТОВ (ПОД ТРЕЙЛЕРОМ НАВЕРХУ!)
+        // ВОЗВРАЩЕНО НА 100%: Твои старые, горизонтальные скриншоты 200x120!
         const scrBlock = document.getElementById('screenshots-block');
         const scrContainer = document.getElementById('screenshots-container');
-        if (game.screenshots && game.screenshots.length > 0 && scrBlock && scrContainer) {
+        if (project.screenshots && project.screenshots.length > 0 && scrBlock && scrContainer) {
             scrBlock.style.display = 'block';
             scrContainer.innerHTML = '';
-            game.screenshots.forEach(src => {
+            project.screenshots.forEach(src => {
                 const img = document.createElement('img');
                 img.src = src;
+                
+                // ТВОИ РОДНЫЕ ИДЕАЛЬНЫЕ ГОРИЗОНТАЛЬНЫЕ НАСТРОЙКИ
                 img.style.width = "200px";
                 img.style.height = "120px";
                 img.style.borderRadius = "8px";
@@ -122,53 +182,49 @@ async function buildGameTemplatePage() {
                 img.style.border = "1px solid #1f2937";
                 img.style.cursor = "pointer";
                 img.style.transition = "transform 0.2s, border-color 0.2s";
+                
                 img.addEventListener('mouseenter', () => { img.style.transform = "scale(1.05)"; img.style.borderColor = "#22d3ee"; });
                 img.addEventListener('mouseleave', () => { img.style.transform = "scale(1)"; img.style.borderColor = "#1f2937"; });
                 img.addEventListener('click', () => { window.open(src, '_blank'); });
                 scrContainer.appendChild(img);
             });
-        } else if (scrBlock) {
-            scrBlock.style.display = 'none'; 
-        }
+        } else if (scrBlock) { scrBlock.style.display = 'none'; }
 
-        // УМНОЕ СКРЫТИЕ И ВЫВОД ВИДЕО-ТРЕЙЛЕРА STEAM-STYLE
+        // Трейлер
         const trailerBlock = document.getElementById('trailer-block');
         const trailerContainer = document.getElementById('trailer-container');
-        if (game.trailer_url && trailerBlock && trailerContainer) {
+        if (project.trailer_url && trailerBlock && trailerContainer) {
             trailerBlock.style.display = 'block';
             trailerContainer.innerHTML = `
                 <div style="position: relative; width: 100%; padding-top: 56.25%; background: #000; border-radius: 8px; overflow: hidden; border: 1px solid #1f2937;">
-                    <iframe src="${game.trailer_url}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
+                    <iframe src="${project.trailer_url}" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" allowfullscreen></iframe>
                 </div>
             `;
-        } else if (trailerBlock) {
-            trailerBlock.style.display = 'none'; 
-        }
+        } else if (trailerBlock) { trailerBlock.style.display = 'none'; }
 
-        // ВЫВОД ИНСТРУКЦИИ ПО УСТАНОВКЕ
+        // Инструкция
         const instructionBlock = document.getElementById('instruction-block');
         const instructionList = document.getElementById('instruction-list');
-        if (game.show_instruction && instructionBlock && instructionList) {
+        if (project.show_instruction && instructionBlock && instructionList) {
             instructionBlock.style.display = 'block'; 
             instructionList.innerHTML = ''; 
-            if (game.instruction_type === 'android') {
+            if (project.instruction_type === 'android') {
                 instructionList.innerHTML = `
-                    <li>Нажмите зеленую кнопку выше для скачивания файла.</li>
+                    <li>Нажмите зеленую кнопку скачивания выше.</li>
                     <li>Разрешите сохранение файла в системе, если браузер выдаст предупреждение.</li>
                     <li>Откройте скачанный APK на телефоне и в настройках безопасности разрешите <em>"Установку из неизвестных источников"</em>.</li>
-                    <li>Завершите процесс установки и запустите приложение/игру!</li>
+                    <li>Завершите процесс установки и запустите игру/приложение!</li>
                 `;
-            } else if (game.instruction_type === 'pc') {
+            } else if (project.instruction_type === 'windows') {
                 instructionList.innerHTML = `
-                    <li>Скачайте архив с игрой по кнопке выше.</li>
-                    <li>Распакуйте скачанный ZIP/RAR архив в любую удобную папку на жестком диске.</li>
-                    <li>Найдите файл запуска игры с расширением <strong>.exe</strong> и дважды нажмите по нему.</li>
+                    <li>Скачайте архив с проектом по кнопке выше.</li>
+                    <li>Распакуйте скачанный ZIP/RAR архив в любую удобную папку на вашем компьютере.</li>
+                    <li>Найдите файл запуска проекта с расширением <strong>.exe</strong> и дважды нажмите по нему.</li>
                     <li>Пользуйтесь! Рекомендуется создать ярлык на рабочем столе.</li>
                 `;
             }
-        } else if (instructionBlock) {
-            instructionBlock.style.display = 'none'; 
-        }
+        } else if (instructionBlock) { instructionBlock.style.display = 'none'; }
+
     } catch (e) { console.error("Ошибка сборки страницы шаблона:", e); }
 }
 
@@ -179,14 +235,19 @@ function initFiltersAndSearch() {
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
             const clickedBtn = e.target;
+            
+            // Фильтрация по типу (Игра / Приложение)
             if (clickedBtn.hasAttribute('data-filter-type')) {
                 document.querySelectorAll('[data-filter-type]').forEach(b => b.classList.remove('active'));
                 currentTypeFilter = clickedBtn.getAttribute('data-filter-type');
             }
+            
+            // Фильтрация по платформе (Windows / Android)
             if (clickedBtn.hasAttribute('data-filter-plat')) {
                 document.querySelectorAll('[data-filter-plat]').forEach(b => b.classList.remove('active'));
                 currentPlatFilter = clickedBtn.getAttribute('data-filter-plat');
             }
+            
             clickedBtn.classList.add('active');
             loadProjectsPage();
         });
