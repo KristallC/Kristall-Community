@@ -5,17 +5,61 @@ async function loadNews() {
     const container = document.getElementById('news-container');
     if (!container) return;
     try {
-        const response = await fetch(NEWS_URL);
+        const response = await fetch('databases/news.json?v=' + new Date().getTime());
         const newsData = await response.json();
-        container.innerHTML = '';
-        newsData.slice(0, 10).forEach(item => {
+        
+        container.innerHTML = ''; 
+
+        newsData.forEach(item => {
             const newsItem = document.createElement('div');
             newsItem.className = 'news-item';
-            newsItem.innerHTML = `<div class="news-date">${item.date}</div><div class="news-title">${item.title}</div><p class="news-text">${item.text}</p>`;
+
+            // ГЕНЕРАЦИЯ УМНОЙ СЕТКИ ИЗОБРАЖЕНИЙ
+            let imagesHTML = '';
+            
+            // Проверяем, есть ли массив картинок и не пустой ли он
+            if (item.images && Array.isArray(item.images) && item.images.length > 0) {
+                // Ограничиваем коллаж максимум 4 картинками, чтобы не ломать верстку
+                const imgsToShow = item.images.slice(0, 4); 
+                const imgCount = imgsToShow.length;
+
+                imagesHTML = `<div class="news-images-grid count-${imgCount}">`;
+                
+                imgsToShow.forEach(src => {
+                    imagesHTML += `
+                        <div class="news-img-wrapper skeleton-shimmer">
+                            <img src="${src}" class="news-img-item" alt="Событие" loading="lazy">
+                        </div>`;
+                });
+                
+                imagesHTML += `</div>`;
+            }
+
+            // Собираем новостную карточку воедино
+            newsItem.innerHTML = `
+                <div class="news-date" style="color: #6b7280; font-size: 11px; font-weight: bold; text-align: left; margin-bottom: 4px;">${item.date}</div>
+                <div class="news-title" style="color: white; font-size: 18px; font-weight: bold; text-align: left; margin-bottom: 8px; line-height: 1.3;">${item.title}</div>
+                <p class="news-text" style="color: #9ca3af; font-size: 13px; line-height: 1.6; text-align: left; margin: 0; white-space: pre-line;">${item.text}</p>
+                <!-- Сюда автоматически встанет наш умный Telegram-коллаж, если картинки есть -->
+                ${imagesHTML}
+            `;
+
+            // Логика плавного проявления картинок и отключения скелетона мерцания
+            const images = newsItem.querySelectorAll('.news-img-item');
+            images.forEach(img => {
+                img.onload = () => {
+                    img.parentElement.classList.remove('skeleton-shimmer'); // Выключаем мерцание
+                    img.style.opacity = '1'; // Плавно проявляем картинку
+                };
+                // Если кликнули на картинку — она красиво откроется в новой вкладке во весь размер
+                img.addEventListener('click', () => { window.open(img.src, '_blank'); });
+            });
+
             container.appendChild(newsItem);
         });
-    } catch (e) { 
-        container.innerHTML = '<div class="news-item"><p class="news-text">Ошибка чтения новостей.</p></div>'; 
+    } catch (e) {
+        console.error(e);
+        container.innerHTML = '<div class="news-item"><p style="color: #ef4444; margin: 0; font-size: 13px;">❌ Ошибка загрузки ленты событий.</p></div>';
     }
 }
 
@@ -53,7 +97,6 @@ async function loadProjectsPage() {
 
         filteredProjects.forEach(project => {
             const card = document.createElement('a');
-            // НАМЕРТВО УБРАЛИ ?game=, ТЕПЕРЬ СТРОГО ?project=
             card.href = `project-template.html?project=${project.id}`;
             card.className = 'game-card'; 
             
@@ -66,14 +109,17 @@ async function loadProjectsPage() {
             }
 
             const hasImages = project.screenshots && project.screenshots.length > 0;
-            const coverSrc = hasImages ? project.screenshots[0] : ''; // Фикс: берем именно первый элемент массива!
+            const coverSrc = hasImages ? project.screenshots[0] : ''; // Четко берем первый скриншот
             
             let coverHTML = '';
             if (hasImages) {
-                coverHTML = `<img src="${coverSrc}" class="card-cover-img" style="width: 100%; height: 130px; object-fit: cover; display: block; transition: transform 0.3s ease;">`;
+                coverHTML = `
+                    <div class="cover-skeleton skeleton-shimmer" style="width: 100%; height: 130px; position: relative; background-color: #070a12;">
+                        <img src="${coverSrc}" class="card-cover-img" style="width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease-in-out;">
+                    </div>`;
             } else {
                 coverHTML = `
-                    <div style="width: 100%; height: 130px; background: linear-gradient(135deg, #070a12, #0f172a); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #1f2937; position: relative;">
+                    <div style="width: 100%; height: 130px; background: linear-gradient(135deg, #070a12, #0f172a); display: flex; align-items: center; justify-content: center; position: relative;">
                         <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="48" height="48" style="filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.4));">
                             <circle cx="12" cy="12" r="9" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="4 2" opacity="0.4" />
                             <path d="M12 2 L19 9 L12 22 L5 9 Z" fill="none" stroke="#22d3ee" stroke-width="1.5" />
@@ -103,6 +149,25 @@ async function loadProjectsPage() {
                     </div>
                 </div>
             `;
+
+            // ЛОГИКА ОТКЛЮЧЕНИЯ МЕРЦАНИЯ ПОСЛЕ СКАЧИВАНИЯ КАРТИНКИ
+            const img = card.querySelector('.card-cover-img');
+            if (img) {
+                img.onload = () => {
+                    const skeleton = card.querySelector('.cover-skeleton');
+                    if (skeleton) skeleton.classList.remove('skeleton-shimmer'); // Выключаем свет
+                    img.style.opacity = "1"; // Плавно проявляем обложку
+                };
+                
+                // Если картинка упала с ошибкой — оставляем аккуратный темный фон
+                img.onerror = () => {
+                    const skeleton = card.querySelector('.cover-skeleton');
+                    if (skeleton) {
+                        skeleton.classList.remove('skeleton-shimmer');
+                        skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">⚠️ Ошибка обложки</span>';
+                    }
+                };
+            }
 
             gridContainer.appendChild(card);
         });
