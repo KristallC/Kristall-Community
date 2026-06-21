@@ -627,3 +627,32 @@ body {
     0% { background-position: 200% 0; }
     100% { background-position: -200% 0; }
 }
+
+/* ==========================================================================
+   СОВРЕМЕННЫЕ КАРТОЧКИ КАТАЛОГА KRISTALL COMMUNITY (STEAM STYLE)
+   ========================================================================== */
+.game-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+    padding: 0 !important;
+    background: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s !important;
+}
+
+/* Эффект наведения на всю карточку */
+.game-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 25px rgba(34, 211, 238, 0.15) !important;
+    border-color: #22d3ee !important;
+}
+
+/* Плавное приближение картинки-обложки при наведении */
+.game-card:hover .card-cover-img {
+    transform: scale(1.06) !important;
+}
