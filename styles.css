@@ -615,3 +615,15 @@ body {
     border-color: #374151;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.02);
 }
+
+/* Эффект мерцания Skeleton Shimmer для скриншотов */
+.skeleton-shimmer {
+    background: linear-gradient(90deg, #070a12 25%, #111827 50%, #070a12 75%);
+    background-size: 200% 100%;
+    animation: shimmer-wave 1.5s infinite linear;
+}
+
+@keyframes shimmer-wave {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
