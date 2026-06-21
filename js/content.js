@@ -24,7 +24,7 @@ async function loadProjectsPage() {
     if (!gridContainer) return;
     try {
         if (allGamesData.length === 0) {
-            const response = await fetch(GAMES_URL);
+            const response = await fetch(GAMES_URL + '?v=' + new Date().getTime());
             allGamesData = await response.json();
         }
         const searchInput = document.getElementById('search-input');
@@ -53,26 +53,57 @@ async function loadProjectsPage() {
 
         filteredProjects.forEach(project => {
             const card = document.createElement('a');
-            // Переводим ссылку на правильный ?project=
+            // НАМЕРТВО УБРАЛИ ?game=, ТЕПЕРЬ СТРОГО ?project=
             card.href = `project-template.html?project=${project.id}`;
-            card.className = 'game-card';
+            card.className = 'game-card'; 
             
             let badgesHTML = '';
             if (project.platforms && Array.isArray(project.platforms)) {
                 project.platforms.forEach(plat => {
                     const color = plat.toLowerCase() === 'windows' ? '#3b82f6' : (plat.toLowerCase() === 'android' ? '#10b981' : '#a855f7');
-                    badgesHTML += `<span class="badge" style="background-color: ${color}; margin-left: 5px; padding: 2px 6px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white;">${plat}</span>`;
+                    badgesHTML += `<span class="badge" style="background-color: ${color}; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; white-space: nowrap;">${plat}</span>`;
                 });
+            }
+
+            const hasImages = project.screenshots && project.screenshots.length > 0;
+            const coverSrc = hasImages ? project.screenshots[0] : ''; // Фикс: берем именно первый элемент массива!
+            
+            let coverHTML = '';
+            if (hasImages) {
+                coverHTML = `<img src="${coverSrc}" class="card-cover-img" style="width: 100%; height: 130px; object-fit: cover; display: block; transition: transform 0.3s ease;">`;
+            } else {
+                coverHTML = `
+                    <div style="width: 100%; height: 130px; background: linear-gradient(135deg, #070a12, #0f172a); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #1f2937; position: relative;">
+                        <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="48" height="48" style="filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.4));">
+                            <circle cx="12" cy="12" r="9" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="4 2" opacity="0.4" />
+                            <path d="M12 2 L19 9 L12 22 L5 9 Z" fill="none" stroke="#22d3ee" stroke-width="1.5" />
+                            <path d="M12 2 L12 22 M5 9 L19 9 M12 2 L5 9 L14 14 L19 9 L12 2" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.7" />
+                        </svg>
+                        <div style="position: absolute; bottom: 8px; font-size: 9px; color: #22d3ee; letter-spacing: 2px; font-weight: bold; opacity: 0.5; text-transform: uppercase;">Kristall Hub</div>
+                    </div>`;
             }
             
             card.innerHTML = `
-                <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
-                    <h3 style="margin: 0; color: white; font-size: 18px;">${project.title}</h3>
-                    <div class="badges-wrapper">${badgesHTML}</div>
+                <div class="cover-wrapper" style="width: 100%; height: 130px; overflow: hidden; position: relative; border-bottom: 1px solid #1f2937;">
+                    ${coverHTML}
                 </div>
-                <p class="card-desc">${project.short_desc}</p>
-                <div class="card-footer">Подробнее →</div>
+                
+                <div class="card-body-content" style="padding: 15px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; width: 100%; min-height: 42px;">
+                        <h3 style="margin: 0; color: white; font-size: 16px; font-weight: bold; text-align: left; line-height: 1.3; word-break: break-word;">${project.title}</h3>
+                        <div class="badges-wrapper" style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; padding-top: 2px;">${badgesHTML}</div>
+                    </div>
+                    
+                    <p class="card-desc" style="margin: 0; text-align: left; color: #9ca3af; font-size: 12px; line-height: 1.5; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        ${project.short_desc}
+                    </p>
+                    
+                    <div class="card-footer" style="margin-top: auto; width: 100%; text-align: center; color: #22d3ee; font-weight: bold; font-size: 13px; padding-top: 10px; border-top: 1px solid rgba(31, 41, 55, 0.5);">
+                        Подробнее →
+                    </div>
+                </div>
             `;
+
             gridContainer.appendChild(card);
         });
     } catch (e) { console.error(e); }
