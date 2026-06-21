@@ -656,3 +656,95 @@ body {
 .game-card:hover .card-cover-img {
     transform: scale(1.06) !important;
 }
+
+/* ==========================================================================
+   УМНАЯ ЛЕНТА НОВОСТЕЙ С КОЛЛАЖАМИ КАРТИНОК (TELEGRAM/WHATSAPP STYLE)
+   ========================================================================== */
+
+/* Сама новостная карточка: добавляем "дышащие" отступы */
+.news-item {
+    background-color: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 25px !important; /* Увеличили отступ, чтобы новости не лепились */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.news-item:hover {
+    border-color: #22d3ee;
+    transform: translateY(-2px);
+}
+
+/* Общий контейнер для коллажа картинок */
+.news-images-grid {
+    display: grid;
+    gap: 8px;
+    margin-top: 15px;
+    border-radius: 10px;
+    overflow: hidden; /* Скругляем углы всему коллажу сразу */
+    width: 100%;
+}
+
+/* Логика изменения сетки в зависимости от количества картинок */
+.news-images-grid.count-1 { grid-template-columns: 1fr; }
+.news-images-grid.count-2 { grid-template-columns: 1fr 1fr; }
+.news-images-grid.count-3 { grid-template-columns: 2fr 1fr; grid-template-rows: 120px 120px; }
+.news-images-grid.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 120px 120px; }
+
+/* Специфичное выравнивание для 3-х картинок (одна большая слева, две маленькие справа) */
+.news-images-grid.count-3 .news-img-wrapper:nth-child(1) {
+    grid-row: span 2;
+    height: 248px;
+}
+
+/* Обертка для каждой отдельной картинки, чтобы работали скелетоны мерцания */
+.news-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 180px; /* Дефолтная высота для 1 и 2 картинок */
+    background-color: #070a12;
+    overflow: hidden;
+}
+
+/* Если картинка одна — делаем её повыше и сочнее */
+.news-images-grid.count-1 .news-img-wrapper {
+    height: 280px;
+}
+
+/* Сами изображения внутри коллажа */
+.news-img-item {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease;
+}
+
+.news-img-item:hover {
+    transform: scale(1.03);
+}
+
+/* Возвращаем сочные краски тексту внутри новостей */
+.news-item .news-title {
+    color: #ffffff !important;         /* Кристально белый цвет для заголовка */
+    font-size: 19px !important;        /* Немного увеличим для солидности */
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Легкий футуристичный объем */
+}
+
+.news-item .news-text {
+    color: #e5e7eb !important;         /* Сочный, контрастный и мягкий светло-серый цвет */
+    font-size: 14px !important;        /* Идеальный размер для чтения */
+    line-height: 1.6 !important;       /* Хороший межстрочный интервал, чтобы глаза не уставали */
+}
+
+.news-item .news-date {
+    color: #22d3ee !important;         /* Подсветим дату твоим фирменным неоновым циановым цветом! */
+    font-size: 11px !important;
+    letter-spacing: 1px;               /* Легкий хай-тек отступ между буквами */
+    margin-bottom: 6px !important;
+}
