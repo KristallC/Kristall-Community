@@ -40,7 +40,6 @@ async function loadNews() {
                 <div class="news-date" style="color: #6b7280; font-size: 11px; font-weight: bold; text-align: left; margin-bottom: 4px;">${item.date}</div>
                 <div class="news-title" style="color: white; font-size: 18px; font-weight: bold; text-align: left; margin-bottom: 8px; line-height: 1.3;">${item.title}</div>
                 <p class="news-text" style="color: #9ca3af; font-size: 13px; line-height: 1.6; text-align: left; margin: 0; white-space: pre-line;">${item.text}</p>
-                <!-- Сюда автоматически встанет наш умный Telegram-коллаж, если картинки есть -->
                 ${imagesHTML}
             `;
 
