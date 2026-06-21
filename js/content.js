@@ -164,31 +164,68 @@ async function buildProjectTemplatePage() {
             });
         } else if (featuresBlock) { featuresBlock.style.display = 'none'; }
 
-        // ТВОЙ СТАРЫЙ, РОДНОЙ И 100% РАБОЧИЙ БЛОК СКРИНШОТОВ
+        // Блок скриншотов
         const scrBlock = document.getElementById('screenshots-block');
         const scrContainer = document.getElementById('screenshots-container');
         if (project.screenshots && project.screenshots.length > 0 && scrBlock && scrContainer) {
             scrBlock.style.display = 'block';
-            scrContainer.innerHTML = '';
+            scrContainer.innerHTML = ''; // Очищаем контейнер
+
             project.screenshots.forEach(src => {
+                // Создаем обертку-скелетон, которая будет мерцать, пока картинка грузится
+                const skeleton = document.createElement('div');
+                skeleton.className = 'skeleton-shimmer';
+                skeleton.style.cssText = "width: 200px; height: 120px; border-radius: 8px; border: 1px solid #1f2937; display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s;";
+
                 const img = document.createElement('img');
                 img.src = src;
                 
-                // Твои оригинальные стили один в один
-                img.style.width = "200px";
-                img.style.height = "120px";
-                img.style.borderRadius = "8px";
+                // Задаем жесткие размеры, чтобы избежать прыжков разметки
+                img.setAttribute('width', '200');
+                img.setAttribute('height', '120');
+                
+                img.style.width = "100%";
+                img.style.height = "100%";
                 img.style.objectFit = "cover";
-                img.style.border = "1px solid #1f2937";
                 img.style.cursor = "pointer";
                 img.style.transition = "transform 0.2s, border-color 0.2s";
+                img.style.opacity = "0"; // Прячем картинку, пока она не скачалась
+                img.style.transition = "opacity 0.3s ease-in-out"; // Плавное появление
+
+                // Когда картинка полностью загрузилась
+                img.onload = () => {
+                    skeleton.className = ''; // Выключаем мерцание у обертки
+                    skeleton.style.background = 'transparent';
+                    img.style.opacity = "1"; // Плавно проявляем скриншот
+                };
+
+                // Если картинка вообще не смогла загрузиться — оставляем просто аккуратный пустой квадрат
+                img.onerror = () => {
+                    skeleton.className = '';
+                    skeleton.style.backgroundColor = '#070a12';
+                    skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">Ошибка...</span>';
+                };
+
+                img.addEventListener('mouseenter', () => {
+                    if (img.style.opacity === "1") {
+                        skeleton.style.transform = "scale(1.05)";
+                        skeleton.style.borderColor = "#22d3ee";
+                    }
+                });
+                img.addEventListener('mouseleave', () => {
+                    skeleton.style.transform = "scale(1)";
+                    skeleton.style.borderColor = "#1f2937";
+                });
+                img.addEventListener('click', () => { 
+                    if (img.style.opacity === "1") window.open(src, '_blank'); 
+                });
                 
-                img.addEventListener('mouseenter', () => { img.style.transform = "scale(1.05)"; img.style.borderColor = "#22d3ee"; });
-                img.addEventListener('mouseleave', () => { img.style.transform = "scale(1)"; img.style.borderColor = "#1f2937"; });
-                img.addEventListener('click', () => { window.open(src, '_blank'); });
-                scrContainer.appendChild(img);
+                skeleton.appendChild(img);
+                scrContainer.appendChild(skeleton);
             });
-        } else if (scrBlock) { scrBlock.style.display = 'none'; }
+        } else if (scrBlock) { 
+            scrBlock.style.display = 'none'; 
+        }
 
         // Трейлер
         const trailerBlock = document.getElementById('trailer-block');
