@@ -58,7 +58,7 @@
     "type": "app",
     "platforms": ["Android"],
     "developer": "Kristall",
-    "version": "1.0.0",
+    "version": "1.0",
     "price": "FREE",
     "downloads": [
       {"label": "Скачать APK", "url": "https://github.com/KristallC/Projects/releases/download/v1.0.0/KCounter_v1.0.0.apk", "os": "android", "size": "11.8 МБ"}
