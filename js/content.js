@@ -108,7 +108,7 @@ async function loadProjectsPage() {
             }
 
             const hasImages = project.screenshots && project.screenshots.length > 0;
-            const coverSrc = hasImages ? project.screenshots[0] : ''; // Четко берем первый скриншот
+            const coverSrc = hasImages ? project.screenshots[0].src : ''; 
             
             let coverHTML = '';
             if (hasImages) {
@@ -198,6 +198,39 @@ async function buildProjectTemplatePage() {
         document.getElementById('game-platform').innerText = project.platforms ? project.platforms.join(', ') : '-';
         document.getElementById('game-version').innerText = project.version;
         document.getElementById('game-developer').innerText = project.developer || "KristallCommunity";
+
+        // ЧТО НОВОГО
+        const whatsNewBlock = document.getElementById('whats-new-block');
+        const whatsNewList = document.getElementById('game-whats-new-list');
+        
+        if (whatsNewBlock && whatsNewList) {
+            if (project.whats_new && Array.isArray(project.whats_new) && project.whats_new.length > 0) {
+                // Если обновления есть — плавно включаем виджет справа (flex)
+                whatsNewBlock.style.display = "block";
+                whatsNewList.innerHTML = ''; 
+                
+                project.screenshots = project.screenshots || []; // Защита от сбоев
+                
+                project.whats_new.forEach(item => {
+                    const li = document.createElement('li');
+                    li.style.display = "flex";          
+                    li.style.alignItems = "flex-start";
+                    li.style.gap = "8px";
+                    li.style.marginBottom = "12px";
+                    
+                    li.innerHTML = `
+                        <svg xmlns="http://w3.org" width="5" height="5" fill="#22d3ee" viewBox="0 0 16 16" style="margin-top: 6px; flex-shrink: 0; filter: drop-shadow(0 0 3px #22d3ee);">
+                            <circle cx="8" cy="8" r="8"/>
+                        </svg>
+                        <span style="color: #d1d5db; line-height: 1.4;">${item}</span>
+                    `;
+                    whatsNewList.appendChild(li);
+                });
+            } else {
+                // Если обновлений нет — блок полностью исчезает
+                whatsNewBlock.style.display = "none";
+            }
+        }
         
         // ВЫВОД НЕСКОЛЬКИХ РАЗНОЦВЕТНЫХ КНОПОК СКАЧИВАНИЯ
         const oldDownloadBtn = document.getElementById('game-download-btn');
@@ -212,21 +245,45 @@ async function buildProjectTemplatePage() {
                     btn.href = link.url;
                     btn.target = "_blank";
                     btn.className = "btn-download"; 
-                    btn.style.display = "block";
+                    
+                    // Твои родные, проверенные стили широкой кнопки по центру
+                    btn.style.display = "flex";          
+                    btn.style.alignItems = "center";
+                    btn.style.position = "relative";     
+                    btn.style.padding = "15px 24px"; 
                     btn.style.marginBottom = "10px";
-                    btn.style.textAlign = "center";
+                    btn.style.textDecoration = "none";
                     btn.style.transition = "0.2s";
                     
-                    let btnColor = '#10b981';
+                    let btnColor = '#10b981'; 
                     let btnHoverColor = '#059669';
+                    let iconSVG = ''; 
                     
                     const osType = link.os?.toLowerCase();
-                    if (osType === 'windows' || project.instruction_type === 'pc') {
+                    
+                    if (osType === 'windows') {
                         btnColor = '#3b82f6'; 
                         btnHoverColor = '#2563eb';
-                    } else if (osType === 'site' || project.type === 'site') {
+                        iconSVG = `
+                            <svg xmlns="http://w3.org" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M6.555 1.375 0 2.237v5.45h6.555zM0 13.795l6.555.859v-5.406H0zm7.445.92 8.555 1.154V9.248H7.445zm8.555-7.037L7.445 1.18v6.488H16z"/>
+                            </svg>`;
+                    } else if (osType === 'android') {
+                        btnColor = '#10b981'; 
+                        btnHoverColor = '#059669';
+                        iconSVG = `
+                            <svg xmlns="http://w3.org" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M2.76 3.061a.5.5 0 0 1 .679.175l1.37 2.372A6.748 6.748 0 0 1 8 5c1.25 0 2.414.34 3.19.923l1.371-2.372a.5.5 0 1 1 .866.5l-1.34 2.32A6.74 6.74 0 0 1 14.5 11h-13a6.74 6.74 0 0 1 1.243-4.63l-1.34-2.32a.5.5 0 0 1 .177-.679zM1 12h14v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm3-3a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm8 0a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
+                            </svg>`;
+                    } else if (osType === 'site') {
                         btnColor = '#a855f7'; 
                         btnHoverColor = '#8b5cf6';
+                        iconSVG = `
+                            <svg xmlns="http://w3.org" width="35" height="35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>`;
                     }
                     
                     btn.style.backgroundColor = btnColor;
@@ -234,7 +291,18 @@ async function buildProjectTemplatePage() {
                     btn.addEventListener('mouseleave', () => btn.style.backgroundColor = btnColor);
 
                     const fileWeight = link.size ? ` | ${link.size}` : ''; 
-                    btn.innerText = `${link.label || 'Скачать'} (${project.price}${fileWeight})`;
+                    
+                    let iconHTML = iconSVG ? `
+                        <div style="position: absolute; left: 24px; display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; flex-shrink: 0;">
+                            ${iconSVG}
+                        </div>` : '';
+                    
+                    btn.innerHTML = `
+                        ${iconHTML}
+                        <span style="width: 100%; text-align: center; font-weight: bold; font-size: 15px; letter-spacing: 0.5px;">
+                            ${link.label || 'Скачать'} (${project.price}${fileWeight})
+                        </span>
+                    `;
                     
                     downloadContainer.insertBefore(btn, nextSibling);
                 });
@@ -264,55 +332,61 @@ async function buildProjectTemplatePage() {
         const scrContainer = document.getElementById('screenshots-container');
         if (project.screenshots && project.screenshots.length > 0 && scrBlock && scrContainer) {
             scrBlock.style.display = 'block';
-            scrContainer.innerHTML = ''; // Очищаем контейнер
+            scrContainer.innerHTML = ''; 
 
-            project.screenshots.forEach(src => {
-                // Создаем обертку-скелетон, которая будет мерцать, пока картинка грузится
+            scrContainer.style.display = "flex";
+            scrContainer.style.alignItems = "center";
+            scrContainer.style.gap = "15px";
+
+            project.screenshots.forEach(screenshot => {
+                const isVertical = screenshot.orient?.toLowerCase() === 'ver';
+
+                // МАСШТАБИРОВАНИЕ: Высота 220px для идеального баланса с плеером трейлера
+                const widthVal = isVertical ? "124" : "366";
+                const heightVal = "220";
+
                 const skeleton = document.createElement('div');
                 skeleton.className = 'skeleton-shimmer';
-                skeleton.style.cssText = "width: 200px; height: 120px; border-radius: 8px; border: 1px solid #1f2937; display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s;";
+                skeleton.style.cssText = `width: ${widthVal}px; height: ${heightVal}px; border-radius: 8px; border: 1px solid #1f2937; display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s;`;
 
                 const img = document.createElement('img');
-                img.src = src;
+                // СТРОГАЯ ЛОГИКА: Читаем только .src из JSON базы данных
+                img.src = screenshot.src;
                 
-                // Задаем жесткие размеры, чтобы избежать прыжков разметки
-                img.setAttribute('width', '200');
-                img.setAttribute('height', '120');
+                img.setAttribute('width', widthVal);
+                img.setAttribute('height', heightVal);
                 
                 img.style.width = "100%";
                 img.style.height = "100%";
                 img.style.objectFit = "cover";
                 img.style.cursor = "pointer";
-                img.style.transition = "transform 0.2s, border-color 0.2s";
-                img.style.opacity = "0"; // Прячем картинку, пока она не скачалась
-                img.style.transition = "opacity 0.3s ease-in-out"; // Плавное появление
+                img.style.opacity = "0"; 
+                img.style.transition = "opacity 0.3s ease-in-out"; 
 
-                // Когда картинка полностью загрузилась
                 img.onload = () => {
-                    skeleton.className = ''; // Выключаем мерцание у обертки
+                    skeleton.className = ''; 
                     skeleton.style.background = 'transparent';
-                    img.style.opacity = "1"; // Плавно проявляем скриншот
+                    img.style.opacity = "1"; 
                 };
 
-                // Если картинка вообще не смогла загрузиться — оставляем просто аккуратный пустой квадрат
                 img.onerror = () => {
                     skeleton.className = '';
                     skeleton.style.backgroundColor = '#070a12';
-                    skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">Ошибка...</span>';
+                    skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">⚠️ Ошибка</span>';
                 };
-
-                img.addEventListener('mouseenter', () => {
+                
+                img.addEventListener('mouseenter', () => { 
                     if (img.style.opacity === "1") {
-                        skeleton.style.transform = "scale(1.05)";
-                        skeleton.style.borderColor = "#22d3ee";
+                        skeleton.style.transform = "scale(1.04)"; 
+                        skeleton.style.borderColor = "#22d3ee"; 
                     }
                 });
-                img.addEventListener('mouseleave', () => {
-                    skeleton.style.transform = "scale(1)";
-                    skeleton.style.borderColor = "#1f2937";
+                img.addEventListener('mouseleave', () => { 
+                    skeleton.style.transform = "scale(1)"; 
+                    skeleton.style.borderColor = "#1f2937"; 
                 });
                 img.addEventListener('click', () => { 
-                    if (img.style.opacity === "1") window.open(src, '_blank'); 
+                    if (img.style.opacity === "1") window.open(screenshot.src, '_blank'); 
                 });
                 
                 skeleton.appendChild(img);
