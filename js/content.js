@@ -163,7 +163,7 @@ async function loadProjectsPage() {
                     const skeleton = card.querySelector('.cover-skeleton');
                     if (skeleton) {
                         skeleton.classList.remove('skeleton-shimmer');
-                        skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">⚠️ Ошибка обложки</span>';
+                        skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">⚠️ Ошибка</span>';
                     }
                 };
             }
@@ -205,7 +205,7 @@ async function buildProjectTemplatePage() {
         
         if (whatsNewBlock && whatsNewList) {
             if (project.whats_new && Array.isArray(project.whats_new) && project.whats_new.length > 0) {
-                // Если обновления есть — плавно включаем виджет справа (flex)
+                // Если обновления есть — включаем
                 whatsNewBlock.style.display = "block";
                 whatsNewList.innerHTML = ''; 
                 
@@ -232,7 +232,7 @@ async function buildProjectTemplatePage() {
             }
         }
         
-        // ВЫВОД НЕСКОЛЬКИХ РАЗНОЦВЕТНЫХ КНОПОК СКАЧИВАНИЯ
+        // ВЫВОД НЕСКОЛЬКИХ КНОПОК СКАЧИВАНИЯ
         const oldDownloadBtn = document.getElementById('game-download-btn');
         if (oldDownloadBtn) {
             const downloadContainer = oldDownloadBtn.parentElement;
@@ -246,14 +246,19 @@ async function buildProjectTemplatePage() {
                     btn.target = "_blank";
                     btn.className = "btn-download"; 
                     
-                    // Твои родные, проверенные стили широкой кнопки по центру
+                    // Стили с защитой от вылезания за края на мобилках
                     btn.style.display = "flex";          
                     btn.style.alignItems = "center";
-                    btn.style.position = "relative";     
+                    btn.style.justifyContent = "center"; 
+                    btn.style.gap = "12px";              
                     btn.style.padding = "15px 24px"; 
                     btn.style.marginBottom = "10px";
                     btn.style.textDecoration = "none";
                     btn.style.transition = "0.2s";
+                    btn.style.borderRadius = "8px";      
+                    btn.style.color = "#ffffff";
+                    btn.style.boxSizing = "border-box";  // Гарантирует, что кнопка не станет шире карточки
+                    btn.style.width = "100%";            // Кнопка адаптивно занимает всю доступную ширину
                     
                     let btnColor = '#10b981'; 
                     let btnHoverColor = '#059669';
@@ -265,21 +270,21 @@ async function buildProjectTemplatePage() {
                         btnColor = '#3b82f6'; 
                         btnHoverColor = '#2563eb';
                         iconSVG = `
-                            <svg xmlns="http://w3.org" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+                            <svg xmlns="http://w3.org" width="28" height="28" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink: 0;">
                                 <path d="M6.555 1.375 0 2.237v5.45h6.555zM0 13.795l6.555.859v-5.406H0zm7.445.92 8.555 1.154V9.248H7.445zm8.555-7.037L7.445 1.18v6.488H16z"/>
                             </svg>`;
                     } else if (osType === 'android') {
                         btnColor = '#10b981'; 
                         btnHoverColor = '#059669';
                         iconSVG = `
-                            <svg xmlns="http://w3.org" width="35" height="35" fill="currentColor" viewBox="0 0 16 16">
+                            <svg xmlns="http://w3.org" width="28" height="28" fill="currentColor" viewBox="0 0 16 16" style="flex-shrink: 0;">
                                 <path d="M2.76 3.061a.5.5 0 0 1 .679.175l1.37 2.372A6.748 6.748 0 0 1 8 5c1.25 0 2.414.34 3.19.923l1.371-2.372a.5.5 0 1 1 .866.5l-1.34 2.32A6.74 6.74 0 0 1 14.5 11h-13a6.74 6.74 0 0 1 1.243-4.63l-1.34-2.32a.5.5 0 0 1 .177-.679zM1 12h14v1a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1v-1zm3-3a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm8 0a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1z"/>
                             </svg>`;
                     } else if (osType === 'site') {
                         btnColor = '#a855f7'; 
                         btnHoverColor = '#8b5cf6';
                         iconSVG = `
-                            <svg xmlns="http://w3.org" width="35" height="35" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+                            <svg xmlns="http://w3.org" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24" style="flex-shrink: 0;">
                                 <circle cx="12" cy="12" r="10"/>
                                 <line x1="2" y1="12" x2="22" y2="12"/>
                                 <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
@@ -292,14 +297,9 @@ async function buildProjectTemplatePage() {
 
                     const fileWeight = link.size ? ` | ${link.size}` : ''; 
                     
-                    let iconHTML = iconSVG ? `
-                        <div style="position: absolute; left: 24px; display: flex; align-items: center; justify-content: center; width: 35px; height: 35px; flex-shrink: 0;">
-                            ${iconSVG}
-                        </div>` : '';
-                    
                     btn.innerHTML = `
-                        ${iconHTML}
-                        <span style="width: 100%; text-align: center; font-weight: bold; font-size: 15px; letter-spacing: 0.5px;">
+                        ${iconSVG ? iconSVG : ''}
+                        <span style="font-weight: bold; font-size: 15px; letter-spacing: 0.5px; text-align: center;">
                             ${link.label || 'Скачать'} (${project.price}${fileWeight})
                         </span>
                     `;
@@ -337,20 +337,42 @@ async function buildProjectTemplatePage() {
             scrContainer.style.display = "flex";
             scrContainer.style.alignItems = "center";
             scrContainer.style.gap = "15px";
+            scrContainer.style.overflowX = "auto";
+            scrContainer.style.overflowY = "hidden";
+
+            scrContainer.style.padding = "10px 15px";
+            scrContainer.style.margin = "-10px -15px 15px -15px";
+
+            // Определяем ширину экрана устройства
+            const deviceWidth = window.innerWidth;
+            const isMobile = deviceWidth <= 768;
 
             project.screenshots.forEach(screenshot => {
                 const isVertical = screenshot.orient?.toLowerCase() === 'ver';
 
-                // МАСШТАБИРОВАНИЕ: Высота 220px для идеального баланса с плеером трейлера
-                const widthVal = isVertical ? "124" : "366";
-                const heightVal = "220";
+                let widthVal, heightVal;
+                
+                if (isMobile) {
+                    // Горизонтальный скриншот будет занимать ровно 75% от ширины экрана смартфона,
+                    // а высота подстроится автоматически под стандартное соотношение сторон 16:9
+                    if (isVertical) {
+                        widthVal = Math.round(deviceWidth * 0.3).toString();  // Вертикальные (около 30% экрана)
+                        heightVal = Math.round(widthVal * 1.77).toString();   // Пропорция 9:16
+                    } else {
+                        widthVal = Math.round(deviceWidth * 0.75).toString(); // Горизонтальные (75% экрана)
+                        heightVal = Math.round(widthVal * 0.5625).toString(); // Пропорция 16:9
+                    }
+                } else {
+                    // Идеальные размеры для ПК-версии
+                    widthVal = isVertical ? "124" : "366";
+                    heightVal = "220";
+                }
 
                 const skeleton = document.createElement('div');
                 skeleton.className = 'skeleton-shimmer';
-                skeleton.style.cssText = `width: ${widthVal}px; height: ${heightVal}px; border-radius: 8px; border: 1px solid #1f2937; display: inline-block; flex-shrink: 0; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s;`;
+                skeleton.style.cssText = `width: ${widthVal}px; height: ${heightVal}px; border-radius: 8px; border: 1px solid #1f2937; display: block; flex-shrink: 0; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s;`;
 
                 const img = document.createElement('img');
-                // СТРОГАЯ ЛОГИКА: Читаем только .src из JSON базы данных
                 img.src = screenshot.src;
                 
                 img.setAttribute('width', widthVal);
