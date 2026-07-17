@@ -60,7 +60,7 @@
     "version": "v1.2",
     "price": "FREE",
     "downloads": [
-      {"label": "Скачать APK", "url": "https://github.com/KristallC/Projects/releases/download/apps/KCounter_v1.2.apk", "os": "android", "size": "63.33 МБ"}
+      {"label": "Скачать APK", "url": "https://github.com/KristallC/Projects/releases/download/apps/KCounter_v1.2.apk", "os": "android", "size": "45.6 МБ"}
     ],
     "short_desc": "Умный, полностью кастомизируемый счётчик с поддержкой HEX-цветов, быстрыми действиями, категориями в меню и адаптивным режимом для планшетов.",
     "full_desc": "KCounter — это современное, легкое и полностью бесплатное Android-приложение, разработанное Kristall Studio. Оно превращает обычный подсчёт данных в приятный, кастомизируемый и плавный процесс.",
