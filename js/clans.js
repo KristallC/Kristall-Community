@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span ${nameStyleHTML}>${clan.name}</span>
                     </td>
                     <td style="padding: 16px 20px; text-align: center; color: #94a3b8; font-weight: 500;">
-                        ${clan.members_current} / ${clan.members_max}
+                        ${clan.members_current}
                     </td>
                     <td style="padding: 16px 20px; text-align: right; font-weight: bold; color: #22d3ee; font-size: 15px; letter-spacing: 0.5px;">
                         ${formattedPoints}
