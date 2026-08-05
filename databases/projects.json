@@ -115,6 +115,9 @@
     "instruction_type": "site",
     "trailer_url": "",
     "screenshots": [],
+    "socials": [
+        { "type": "telegram", "url": "https://discord.gg/wHtpgGZUa", "label": "Сервер в Discord" }
+    ],
     "whats_new": [
       "улучшенное мобильное управление",
       "перебалансировка оружия",
