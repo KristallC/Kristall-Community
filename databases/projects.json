@@ -114,9 +114,11 @@
     "show_instruction": false,
     "instruction_type": "site",
     "trailer_url": "",
-    "screenshots": [],
+    "screenshots": [
+      {"src": "https://github.com/KristallC/Projects/blob/main/War%204/screenshots/Screenshot_2026-07-25-21-04-34-939_com.roblox.client.jpg?raw=true"}
+    ],
     "socials": [
-        { "type": "telegram", "url": "https://discord.gg/wHtpgGZUa", "label": "Сервер в Discord" }
+        { "type": "discord", "url": "https://discord.gg/wHtpgGZUa", "label": "Сервер в Discord" }
     ],
     "whats_new": [
       "улучшенное мобильное управление",
