@@ -76,9 +76,9 @@
     "instruction_type": "android",
     "trailer_url": "",
     "screenshots": [
-      {"src": "https://github.com/KristallC/Projects/blob/main/screenshots/KCounter/Polish_20260701_003627860.jpg?raw=true"},
-      {"src": "https://github.com/KristallC/Projects/blob/main/screenshots/KCounter/IMG_20260701_003706.jpg?raw=true", "orient": "ver"},
-      {"src": "https://github.com/KristallC/Projects/blob/main/screenshots/KCounter/IMG_20260701_003748.jpg?raw=true", "orient": "ver"}
+      {"src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/Polish_20260701_003627860.jpg?raw=true"},
+      {"src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/IMG_20260701_003706.jpg?raw=true", "orient": "ver"},
+      {"src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/IMG_20260701_003748.jpg?raw=true", "orient": "ver"}
     ],
     "whats_new": [
       "улучшена навигация системными кнопками",
