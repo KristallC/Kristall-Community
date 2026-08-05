@@ -430,6 +430,112 @@ async function buildProjectTemplatePage() {
             `;
         } else if (trailerBlock) { trailerBlock.style.display = 'none'; }
 
+        // БЛОК СОЦИАЛЬНЫХ СЕТЕЙ
+        const socialsBlock = document.getElementById('socials-block');
+        const socialsList = document.getElementById('game-socials-list');
+
+        if (socialsBlock && socialsList) {
+            if (project.socials && Array.isArray(project.socials) && project.socials.length > 0) {
+                socialsBlock.style.display = "block";
+                socialsList.innerHTML = '';
+
+                project.socials.forEach(social => {
+                    const linkCard = document.createElement('a');
+                    linkCard.href = social.url;
+                    linkCard.target = "_blank";
+                
+                    // Красивые базовые стили плашек-ссылок в тон твоего сайта
+                    linkCard.style.display = "inline-flex";
+                    linkCard.style.alignItems = "center";
+                    linkCard.style.gap = "8px";
+                    linkCard.style.padding = "8px 14px";
+                    linkCard.style.borderRadius = "6px";
+                    linkCard.style.fontSize = "13px";
+                    linkCard.style.fontWeight = "bold";
+                    linkCard.style.textDecoration = "none";
+                    linkCard.style.transition = "background-color 0.2s, transform 0.2s";
+                    linkCard.style.boxSizing = "border-box";
+
+                    let iconSVG = '';
+                    let bgColor = '#1e293b';       // Базовый темный цвет
+                    let hoverColor = '#334155';    // Цвет при наведении
+                    let textColor = '#cbd5e1';     // Цвет текста
+
+                    const type = social.type?.toLowerCase();
+
+                    // Готовим SVG и брендовые цвета для каждого типа
+                    if (type === 'telegram') {
+                        bgColor = 'rgba(34, 158, 217, 0.1)';
+                        hoverColor = 'rgba(34, 158, 217, 0.2)';
+                        textColor = '#229ed9';
+                        iconSVG = `<svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM8.287 5.906c-.778.324-2.334.994-4.666 2.01-.378.15-.577.298-.595.442-.03.243.275.339.69.47l.175.055c.408.133.958.288 1.25.294.26.006.554-.1.882-.317 2.251-1.52 3.387-2.29 3.41-2.31.018-.015.044-.047.019-.025-.024.022-.618.574-1.39 1.293-.24.225-.43.431-.45.45-.044.04-.09.086-.134.13l-.127.128c-.314.314-.543.543-.01.894l.111.074c.42.275.83.55 1.25.823.475.308.851.552 1.345.507.288-.027.58-.3.732-1.117l.745-3.952c.03-.177-.04-.324-.23-.324a1.472 1.472 0 0 0-.254.026z"/></svg>`;
+                    } else if (type === 'discord') {
+                        bgColor = 'rgba(88, 101, 242, 0.1)';
+                        hoverColor = 'rgba(88, 101, 242, 0.2)';
+                        textColor = '#5865f2';
+                        iconSVG = `<svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M13.545 2.907a13.227 13.227 0 0 0-3.257-1.011.05.05 0 0 0-.052.025c-.141.25-.297.575-.407.837a12.256 12.256 0 0 0-3.658 0 8.284 8.284 0 0 0-.412-.837.052.052 0 0 0-.052-.025 13.228 13.228 0 0 0-3.258 1.011.041.041 0 0 0-.021.018C.356 6.024-.213 9.047.066 12.032a.054.054 0 0 0 .022.039c2.161 1.594 4.193 2.564 6.177 3.185a.054.054 0 0 0 .058-.019c.461-.63.868-1.31 1.216-2.021a.051.051 0 0 0-.028-.07 8.68 8.68 0 0 1-1.211-.578.051.051 0 0 1-.006-.084c.085-.063.17-.129.252-.197a.05.05 0 0 1 .052-.007c4.14 1.9 8.461 0 8.461 0a.05.05 0 0 1 .053.007c.083.068.168.134.253.197a.051.051 0 0 1-.006.084 7.67 7.67 0 0 1-1.211.578.05.05 0 0 0-.028.07c.35.711.755 1.391 1.216 2.021a.055.055 0 0 0 .058.019c1.985-.62 4.021-1.591 6.177-3.184a.054.054 0 0 0 .022-.039c.325-3.4-.444-6.393-1.843-9.106a.042.042 0 0 0-.02-.019zm-8.38 8.013c-.83 0-1.513-.757-1.513-1.693s.675-1.693 1.512-1.693c.838 0 1.514.764 1.514 1.693 0 .936-.676 1.693-1.513 1.693zm5.442 0c-.83 0-1.513-.757-1.513-1.693s.675-1.693 1.512-1.693c.839 0 1.514.764 1.514 1.693 0 .936-.676 1.693-1.513 1.693z"/></svg>`;
+                    } else if (type === 'youtube') {
+                        bgColor = 'rgba(255, 0, 0, 0.1)';
+                        hoverColor = 'rgba(255, 0, 0, 0.2)';
+                        textColor = '#ff0000';
+                        iconSVG = `<svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8.051 1.999h.089c.822.003 4.987.033 6.11.335a2.01 2.01 0 0 1 1.415 1.42c.3 1.12.3 3.48.3 3.48s0 2.36-.3 3.48a2.01 2.01 0 0 1-1.415 1.419c-1.122.299-5.288.329-6.11.329h-.089c-.822 0-4.987-.03-6.11-.329a2.01 2.01 0 0 1-1.415-1.419c-.3-1.12-.3-3.48-.3-3.48s0-2.36.3-3.48a2.01 2.01 0 0 1 1.415-1.42c1.123-.31 5.287-.33 6.11-.336h.09zM6.557 10.277 10.355 8 6.557 5.723v4.554z"/></svg>`;
+                    } else if (type === 'rutube') {
+                        bgColor = 'rgba(0, 180, 255, 0.1)';
+                        hoverColor = 'rgba(0, 180, 255, 0.2)';
+                        textColor = '#00b4ff';
+                        iconSVG = `
+                            <svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 512 512" style="transform: scale(1.05);">
+                                <path d="M374.3 0H137.7C61.6 0 0 61.6 0 137.7v236.6C0 450.4 61.6 512 137.7 512h236.6c76.1 0 137.7-61.6 137.7-137.7V137.7C512 61.6 450.4 0 374.3 0zm19.8 386.4H236.3V261.2h120.1c42.8 0 57.6-26.6 57.6-59.5 0-33-14.8-59.5-57.6-59.5H161.4v244.2h-61.1V102.4h263.2c65.6 0 112.5 35 112.5 99.3 0 46.9-24.9 79.2-66.9 92.4l85.1 92.3z"/>
+                            </svg>`;
+                    } else if (type === 'vk') {
+                        bgColor = 'rgba(0, 119, 255, 0.1)';
+                        hoverColor = 'rgba(0, 119, 255, 0.2)';
+                        textColor = '#0077ff';
+                        iconSVG = `<svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M23.45 5.94c.18-.6.02-1.04-.84-1.04h-2.77c-.7 0-1.03.37-1.21.78 0 0-1.4 3.42-3.4 5.64-.64.64-.93.85-1.28.85-.18 0-.44-.21-.44-.81V5.94c0-.7-.2-1.04-.79-1.04H8.56c-.44 0-.7.33-.7.64 0 .67 1 1.22 1.1 2.71v4.1c0 .9-.16 1.06-.52 1.06-.95 0-3.26-3.43-4.63-7.37-.27-.77-.54-1.08-1.25-1.08H.82c-.8 0-.96.37-.96.79 0 .74.95 4.5 4.43 9.4 2.32 3.34 5.58 5.15 8.56 5.15 1.78 0 2-.4 2-1.1v-2.5c0-.8.17-.96.73-.96.4 0 1.1.2 2.73 1.77 1.86 1.86 2.16 2.73 3.2 2.73h2.78c.8 0 1.19-.4.96-1.2-.25-.79-1.16-1.94-1.58-2.45-.23-.28-.58-.59-.69-.74-.15-.2-.11-.28 0-.46 0 0 1.34-1.9 2.5-4.22z"/></svg>`;
+                    } else if (type === 'github') {
+                        bgColor = 'rgba(255, 255, 255, 0.08)';
+                        hoverColor = 'rgba(255, 255, 255, 0.15)';
+                        textColor = '#ffffff';
+                        iconSVG = `<svg xmlns="http://w3.org" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>`;
+                    } else if (type === 'x') {
+                        bgColor = 'rgba(255, 255, 255, 0.05)';
+                        hoverColor = 'rgba(255, 255, 255, 0.1)';
+                        textColor = '#e1e8ed';
+                        iconSVG = `<svg xmlns="http://w3.org" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/></svg>`;
+                    } else {
+                        bgColor = 'rgba(34, 211, 238, 0.1)';
+                        hoverColor = 'rgba(34, 211, 238, 0.2)';
+                        textColor = '#22d3ee';
+                        iconSVG = `<svg xmlns="http://w3.org" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>`;
+                    }
+
+                    linkCard.style.backgroundColor = bgColor;
+                    linkCard.style.color = textColor;
+
+                    linkCard.addEventListener('mouseenter', () => {
+                        linkCard.style.backgroundColor = hoverColor;
+                        linkCard.style.transform = "translateY(-1px)";
+                    });
+                    linkCard.addEventListener('mouseleave', () => {
+                        linkCard.style.backgroundColor = bgColor;
+                        linkCard.style.transform = "translateY(0)";
+                    });
+
+                    // ЦЕНТРИРУЮЩИЙ FLEXBOX-КОНТЕЙНЕР ДЛЯ SVG
+                    linkCard.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; width: 20px; height: 20px; flex-shrink: 0; line-height: 0;">
+                            ${iconSVG}
+                        </div>
+                        <span>${social.label || 'Ссылка'}</span>
+                    `;
+                    socialsList.appendChild(linkCard);
+                });
+
+            } else {
+                socialsBlock.style.display = "none";
+            }
+        }
+
         // Инструкция
         const instructionBlock = document.getElementById('instruction-block');
         const instructionList = document.getElementById('instruction-list');
