@@ -3,12 +3,19 @@
     "id": "kristallcommunity",
     "title": "KristallCommunity - версии для установки",
     "type": "app",
-    "platforms": ["Android"],
+    "platforms": [
+      "Android"
+    ],
     "developer": "Kristall",
     "version": "1.0.0.0",
     "price": "FREE",
     "downloads": [
-      {"label": "Скачать APK", "url": "https://github.com/KristallC/Kristall-Community/releases/download/1.0.0.0/Kristall.apk", "os": "android", "size": "1.18 МБ"}
+      {
+        "label": "Скачать APK",
+        "url": "https://github.com/KristallC/Kristall-Community/releases/download/1.0.0.0/Kristall.apk",
+        "os": "android",
+        "size": "1.18 МБ"
+      }
     ],
     "short_desc": "Версии KristallCommunity для скачивания.",
     "full_desc": "KristallCommunity - веб-приложение сообщества Kristall, где вы можете: получать свежие новости со всего сообщества, пользоваться каталогом игр и приложений, скупать лимитированные украшения профиля в магазине и многое другое!",
@@ -24,12 +31,19 @@
     "id": "money-empire",
     "title": "Money Empire",
     "type": "game",
-    "platforms": ["Android"],
+    "platforms": [
+      "Android"
+    ],
     "developer": "Kristall",
     "version": "b1.0.5",
     "price": "FREE",
     "downloads": [
-      {"label": "Скачать APK", "url": "https://github.com/Vlad-2011/Kristall-Community/releases/download/b1.0.5/MoneyEmpire.apk", "os": "android", "size": "59.1 МБ"}
+      {
+        "label": "Скачать APK",
+        "url": "https://github.com/Vlad-2011/Kristall-Community/releases/download/b1.0.5/MoneyEmpire.apk",
+        "os": "android",
+        "size": "59.1 МБ"
+      }
     ],
     "short_desc": "Экономическая стратегия-симулятор. Постройте бизнес, управляйте криптовалютой и создайте величайшую финансовую империю.",
     "full_desc": "Money Empire — это экономический симулятор-стратегия для Android, в котором вы начнете свой путь с обычного карманного капитала и сможете вырасти до владельца крупнейшей мировой корпорации. Управляйте бизнесами, инвестируйте в криптовалюту, рискуйте в казино и станьте богатейшим игроком!",
@@ -43,11 +57,22 @@
     "instruction_type": "android",
     "trailer_url": "https://rutube.ru/play/embed/7adb3552055f07a3ecbfd37e45d51e12/?p=bOHBsgUWlohtqmmpMZJGZw",
     "screenshots": [
-      {"src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/Screenshot_2026-06-03-14-49-31-426_com.kristall.moneyempire-edit.jpg?raw=true", "orient": "hor"},
-      {"src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/Screenshot_2026-06-03-14-49-52-097_com.kristall.moneyempire.jpg?raw=true"},
-      {"src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/Screenshot_2026-06-03-14-50-02-976_com.kristall.moneyempire.jpg?raw=true"},
-      {"src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/IMG_20260603_145123_148.jpg?raw=true"},
-      {"src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/IMG_20260603_145217.jpg?raw=true"}
+      {
+        "src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/Screenshot_2026-06-03-14-49-31-426_com.kristall.moneyempire-edit.jpg?raw=true",
+        "orient": "hor"
+      },
+      {
+        "src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/Screenshot_2026-06-03-14-49-52-097_com.kristall.moneyempire.jpg?raw=true"
+      },
+      {
+        "src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/Screenshot_2026-06-03-14-50-02-976_com.kristall.moneyempire.jpg?raw=true"
+      },
+      {
+        "src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/IMG_20260603_145123_148.jpg?raw=true"
+      },
+      {
+        "src": "https://github.com/KristallC/GameScreenshots/blob/main/MoneyEmpire/IMG_20260603_145217.jpg?raw=true"
+      }
     ],
     "whats_new": []
   },
@@ -55,12 +80,19 @@
     "id": "kcounter",
     "title": "KCounter - функциональный счётчик",
     "type": "app",
-    "platforms": ["Android"],
+    "platforms": [
+      "Android"
+    ],
     "developer": "Kristall",
     "version": "v1.2",
     "price": "FREE",
     "downloads": [
-      {"label": "Скачать APK", "url": "https://github.com/KristallC/Projects/releases/download/apps/KCounter_v1.2.apk", "os": "android", "size": "45.6 МБ"}
+      {
+        "label": "Скачать APK",
+        "url": "https://github.com/KristallC/Projects/releases/download/apps/KCounter_v1.2.apk",
+        "os": "android",
+        "size": "45.6 МБ"
+      }
     ],
     "short_desc": "Умный, полностью кастомизируемый счётчик с поддержкой HEX-цветов, быстрыми действиями, категориями в меню и адаптивным режимом для планшетов.",
     "full_desc": "KCounter — это современное, легкое и полностью бесплатное Android-приложение, разработанное Kristall Studio. Оно превращает обычный подсчёт данных в приятный, кастомизируемый и плавный процесс.",
@@ -76,9 +108,17 @@
     "instruction_type": "android",
     "trailer_url": "",
     "screenshots": [
-      {"src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/Polish_20260701_003627860.jpg?raw=true"},
-      {"src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/IMG_20260701_003706.jpg?raw=true", "orient": "ver"},
-      {"src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/IMG_20260701_003748.jpg?raw=true", "orient": "ver"}
+      {
+        "src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/Polish_20260701_003627860.jpg?raw=true"
+      },
+      {
+        "src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/IMG_20260701_003706.jpg?raw=true",
+        "orient": "ver"
+      },
+      {
+        "src": "https://github.com/KristallC/Projects/blob/main/KCounter/screenshots/IMG_20260701_003748.jpg?raw=true",
+        "orient": "ver"
+      }
     ],
     "whats_new": [
       "улучшена навигация системными кнопками",
@@ -95,7 +135,7 @@
       "Site"
     ],
     "developer": "Kristall",
-    "version": "29/07/2026",
+    "version": "15/08/2026",
     "price": "FREE",
     "downloads": [
       {
@@ -115,17 +155,20 @@
     "instruction_type": "site",
     "trailer_url": "",
     "screenshots": [
-      {"src": "https://github.com/KristallC/Projects/blob/main/War%204/screenshots/Screenshot_2026-07-25-21-04-34-939_com.roblox.client.jpg?raw=true"}
+      {
+        "src": "https://github.com/KristallC/Projects/blob/main/War%204/screenshots/Screenshot_2026-07-25-21-04-34-939_com.roblox.client.jpg?raw=true"
+      }
     ],
     "socials": [
-        { "type": "discord", "url": "https://discord.gg/wHtpgGZUa", "label": "Сервер в Discord" }
+      {
+        "type": "discord",
+        "url": "https://discord.gg/wHtpgGZUa",
+        "label": "Сервер в Discord"
+      }
     ],
     "whats_new": [
-      "улучшенное мобильное управление",
-      "перебалансировка оружия",
-      "новое оружие: пулемёт",
-      "системные сообщения об убийствах",
-      "маркеры союзников на экране",
+      "новый интерфейс инвентаря",
+      "лестницы в замках",
       "исправления ошибок"
     ]
   }
