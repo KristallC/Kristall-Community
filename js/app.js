@@ -62,10 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             currentUser.balance += 5; // +5 честных монет
             currentUser.last_daily_claim = now;
-            currentUser.xp = (parseInt(currentUser.xp) || 0) + 5;
             
             localStorage.setItem('kristall_user', JSON.stringify(currentUser));
-            showKristallToast("Ежедневный бонус получен! +5 монет, +5 XP.", "📆");
+            showKristallToast("Ежедневный бонус получен! +5 монет.", "📆");
             if (typeof buildProfilePage === 'function') buildProfilePage();
         });
     }
@@ -84,14 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const coinWin = Math.floor(Math.random() * 15) + 1; // От 1 до 16 монет
-            const xpWin = Math.floor(Math.random() * 15) + 5;   // От 5 до 20 опыта
 
             currentUser.balance += coinWin;
             currentUser.last_chest_claim = now;
-            currentUser.xp = (parseInt(currentUser.xp) || 0) + xpWin;
 
             localStorage.setItem('kristall_user', JSON.stringify(currentUser));
-            showKristallToast(`Вы получили: +${coinWin} монет, +${xpWin} XP`, "📦");
+            showKristallToast(`Вы получили: +${coinWin} монет.`, "📦");
             if (typeof buildProfilePage === 'function') buildProfilePage();
         });
     }
