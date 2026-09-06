@@ -294,7 +294,6 @@ function buildProfilePage() {
         }
     }
 
-    document.getElementById('prof-level').innerText = currentUser.level;
     document.getElementById('balance-num').innerText = currentUser.balance;
     document.getElementById('prof-desc-text').innerText = currentUser.description || "Новобранец KristallCommunity.";
 
@@ -338,11 +337,6 @@ function buildProfilePage() {
 
         colorSelect.value = currentUser.avatar_color || "#22d3ee";
     }
-
-    const reqXp = getRequiredXp(currentUser.level);
-    document.getElementById('prof-xp-text').innerText = `${currentUser.xp} / ${reqXp} XP`;
-    const percent = Math.min((currentUser.xp / reqXp) * 100, 100);
-    document.getElementById('prof-xp-fill').style.width = `${percent}%`;
 
     const invContainer = document.getElementById('prof-inventory');
     if (invContainer) {
