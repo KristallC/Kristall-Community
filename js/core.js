@@ -7,10 +7,6 @@ let currentTypeFilter = 'all';
 let currentPlatFilter = 'all';
 let currentUser = JSON.parse(localStorage.getItem('kristall_user')) || null;
 
-function getRequiredXp(level) {
-    return level * 100; 
-}
-
 // ФИРМЕННЫЕ ВСПОЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ KRISTALL (БЕЗ ALERT)
 function showKristallToast(message, icon = "⚡") {
     const toast = document.getElementById('kristall-toast');
