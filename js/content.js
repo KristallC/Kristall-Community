@@ -788,8 +788,7 @@ function buildMainSideProfile() {
             <div style="color: ${nameColor}; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.8;">${roleName}</div>
             
             <div style="width: 100%; margin-top: 10px; border-top: 1px solid #1f2937; padding-top: 10px; display: flex; justify-content: space-around; font-size: 13px;">
-                <div style="color: #9ca3af;">Уровень: <strong style="color: #22d3ee;">${currentUser.level}</strong></div>
-                <div style="color: #9ca3af;">Баланс: <strong style="color: #10b981;">${currentUser.balance} 🪙</strong></div>
+                <div style="color: #9ca3af;">Баланс: <strong style="color: #10b981;">${currentUser.balance} ❂</strong></div>
             </div>
             <a href="profile.html" style="width: 100%; margin-top: 12px; background: #1f2937; color: white; border: 1px solid #374151; padding: 8px; border-radius: 6px; text-decoration: none; font-size: 12px; font-weight: bold; transition: 0.2s; text-align:center;" onmouseenter="this.style.borderColor='#22d3ee'" onmouseleave="this.style.borderColor='#374151'">Открыть личный кабинет</a>
         `;
