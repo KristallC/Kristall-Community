@@ -65,6 +65,13 @@ footer {
     box-shadow: 0 0 15px rgba(88, 101, 242, 0.5);
 }
 
+.social-btn.max-btn:hover {
+    color: #fff;
+    border-color: #a855f7;
+    background-color: #7c3aed;
+    box-shadow: 0 0 15px rgba(168, 85, 247, 0.5);
+}
+
 @media (max-width: 480px) {
     .social-btn {
         width: 100%;
