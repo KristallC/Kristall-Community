@@ -502,6 +502,15 @@ async function buildProjectTemplatePage() {
                         hoverColor = 'rgba(255, 255, 255, 0.1)';
                         textColor = '#e1e8ed';
                         iconSVG = `<svg xmlns="http://w3.org" width="14" height="14" fill="currentColor" viewBox="0 0 16 16"><path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865l8.875 11.633Z"/></svg>`;
+                    } else if (type === 'max') {
+                        bgColor = 'rgba(168, 85, 247, 0.1)';   // Нежно-фиолетовая подложка под тон ховера футера
+                        hoverColor = 'rgba(168, 85, 247, 0.2)';// Чуть ярче при наведении
+                        textColor = '#a855f7';                 // Фирменный сиреневый цвет текста и линий
+                        iconSVG = `
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12c0 2.3.78 4.42 2.1 6.1L3 21l2.9-.9c1.68 1.18 3.74 1.9 6.1 1.9z"/>
+                                <path d="M12 15.5c1.933 0 3.5-1.567 3.5-3.5S13.933 8.5 12 8.5s-3.5 1.567-3.5 3.5.78 2.1 2.1 2.9l-1.1 1.1 2.5-1z"/>
+                            </svg>`;
                     } else {
                         bgColor = 'rgba(34, 211, 238, 0.1)';
                         hoverColor = 'rgba(34, 211, 238, 0.2)';
