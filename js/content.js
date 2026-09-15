@@ -813,3 +813,81 @@ function buildMainSideProfile() {
     }
     if (typeof applyAvatarBorderColor === 'function') applyAvatarBorderColor();
 }
+
+// ==========================================
+// 3.В. ЗАГРУЗКА И ДИНАМИЧЕСКИЙ ВЫВОД СОБЫТИЙ
+// ==========================================
+async function loadCommunityEvents() {
+    const block = document.getElementById('events-block');
+    const container = document.getElementById('events-container');
+    if (!block || !container) return;
+
+    try {
+        const response = await fetch('databases/events.json?v=' + new Date().getTime());
+        if (!response.ok) throw new Error("Файл событий не найден");
+        
+        const eventsData = await response.json();
+
+        // Если данных нет — блок полностью исчезает
+        if (!eventsData || !Array.isArray(eventsData) || eventsData.length === 0) {
+            block.style.display = "none";
+            return;
+        }
+
+        block.style.display = "block";
+        container.innerHTML = '';
+
+        eventsData.forEach((event, index) => {
+            const eventCard = document.createElement('div');
+            
+            // Легкий разделитель между ивентами, если их несколько
+            const borderStyle = index > 0 ? "border-top: 1px solid rgba(55, 65, 81, 0.4); padding-top: 15px;" : "";
+            
+            eventCard.style.cssText = `${borderStyle} display: flex; flex-direction: column; gap: 8px; box-sizing: border-box;`;
+
+            let statusBadge = '';
+            if (event.status?.toLowerCase() === 'live') {
+                statusBadge = `<span style="background-color: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; height: max-content;">● В эфире</span>`;
+            } else {
+                statusBadge = `<span style="background-color: rgba(34, 211, 238, 0.1); color: #22d3ee; border: 1px solid rgba(34, 211, 238, 0.3); padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: bold; text-transform: uppercase; letter-spacing: 0.5px; height: max-content;">Скоро</span>`;
+            }
+
+            let actionBtnHTML = '';
+            if (event.action_url && event.action_url.trim() !== '') {
+                actionBtnHTML = `
+                    <a href="${event.action_url}" target="_blank" style="align-self: flex-start; margin-top: 4px; display: inline-flex; align-items: center; background: #1f2937; color: #22d3ee; border: 1px solid #374151; text-decoration: none; font-weight: bold; font-size: 11px; padding: 6px 12px; border-radius: 6px; transition: 0.2s;">
+                        Участвовать →
+                    </a>`;
+            }
+
+            eventCard.innerHTML = `
+                <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; width: 100%;">
+                    <div style="color: white; font-weight: bold; font-size: 14px; text-align: left; line-height: 1.3;">${event.title}</div>
+                    ${statusBadge}
+                </div>
+                <div style="color: #9ca3af; font-size: 11px; text-align: left; font-weight: 500;">⏱ ${event.time}</div>
+                <p style="color: #6b7280; font-size: 12px; line-height: 1.4; text-align: left; margin: 0; white-space: pre-line;">${event.description}</p>
+                ${actionBtnHTML}
+            `;
+
+            // Ховер-эффекты для кнопки действия внутри сайдбара
+            const btn = eventCard.querySelector('a');
+            if (btn) {
+                btn.addEventListener('mouseenter', () => {
+                    btn.style.borderColor = '#22d3ee';
+                    btn.style.background = '#1f2937';
+                });
+                btn.addEventListener('mouseleave', () => {
+                    btn.style.borderColor = '#374151';
+                    btn.style.background = '#1f2937';
+                });
+            }
+
+            container.appendChild(eventCard);
+        });
+
+    } catch (error) {
+        console.error("Ошибка загрузки событий:", error);
+        block.style.display = "none"; // В случае падения просто скрываем блок, чтобы не портить вид
+    }
+}
