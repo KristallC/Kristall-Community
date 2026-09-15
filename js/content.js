@@ -191,17 +191,17 @@ async function buildProjectTemplatePage() {
 
         // Заполнение текстов
         document.title = `${project.title} — KristallCommunity`;
-        document.getElementById('game-title').innerText = project.title;
-        document.getElementById('game-short-desc').innerText = project.short_desc;
-        document.getElementById('game-full-desc').innerText = project.full_desc || "Описание проекта готовится к публикации.";
+        document.getElementById('project-title').innerText = project.title;
+        document.getElementById('project-short-desc').innerText = project.short_desc;
+        document.getElementById('project-full-desc').innerText = project.full_desc || "Описание проекта готовится к публикации.";
         
-        document.getElementById('game-platform').innerText = project.platforms ? project.platforms.join(', ') : '-';
-        document.getElementById('game-version').innerText = project.version;
-        document.getElementById('game-developer').innerText = project.developer || "KristallCommunity";
+        document.getElementById('project-platform').innerText = project.platforms ? project.platforms.join(', ') : '-';
+        document.getElementById('project-version').innerText = project.version;
+        document.getElementById('project-developer').innerText = project.developer || "Не указан";
 
         // ЧТО НОВОГО
         const whatsNewBlock = document.getElementById('whats-new-block');
-        const whatsNewList = document.getElementById('game-whats-new-list');
+        const whatsNewList = document.getElementById('whats-new-list');
         
         if (whatsNewBlock && whatsNewList) {
             if (project.whats_new && Array.isArray(project.whats_new) && project.whats_new.length > 0) {
@@ -233,7 +233,7 @@ async function buildProjectTemplatePage() {
         }
         
         // ВЫВОД НЕСКОЛЬКИХ КНОПОК СКАЧИВАНИЯ
-        const oldDownloadBtn = document.getElementById('game-download-btn');
+        const oldDownloadBtn = document.getElementById('project-download-btn');
         if (oldDownloadBtn) {
             const downloadContainer = oldDownloadBtn.parentElement;
             const nextSibling = oldDownloadBtn.nextSibling;
@@ -300,7 +300,7 @@ async function buildProjectTemplatePage() {
                     btn.innerHTML = `
                         ${iconSVG ? iconSVG : ''}
                         <span style="font-weight: bold; font-size: 15px; letter-spacing: 0.5px; text-align: center;">
-                            ${link.label || 'Скачать'} (${project.price}${fileWeight})
+                            ${link.label || 'Скачать'} (${fileWeight})
                         </span>
                     `;
                     
@@ -316,7 +316,7 @@ async function buildProjectTemplatePage() {
 
         // Блоки особенностей
         const featuresBlock = document.getElementById('features-block');
-        const featuresContainer = document.getElementById('game-features');
+        const featuresContainer = document.getElementById('project-features');
         if (featuresContainer && project.features && project.features.length > 0) {
             if (featuresBlock) featuresBlock.style.display = 'block';
             featuresContainer.innerHTML = '';
@@ -432,7 +432,7 @@ async function buildProjectTemplatePage() {
 
         // БЛОК СОЦИАЛЬНЫХ СЕТЕЙ
         const socialsBlock = document.getElementById('socials-block');
-        const socialsList = document.getElementById('game-socials-list');
+        const socialsList = document.getElementById('project-socials-list');
 
         if (socialsBlock && socialsList) {
             if (project.socials && Array.isArray(project.socials) && project.socials.length > 0) {
