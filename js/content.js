@@ -177,7 +177,7 @@ async function buildProjectTemplatePage() {
     if (!document.getElementById('game-title')) return; 
 
     const urlParams = new URLSearchParams(window.location.search);
-    const projectId = urlParams.get('project') || urlParams.get('game');
+    const projectId = urlParams.get('project');
     if (!projectId) { window.location.href = 'projects.html'; return; }
 
     try {
@@ -190,7 +190,7 @@ async function buildProjectTemplatePage() {
         if (!project) return;
 
         // Заполнение текстов
-        document.title = `${project.title} - KristallCommunity`;
+        document.title = `${project.title} — KristallCommunity`;
         document.getElementById('game-title').innerText = project.title;
         document.getElementById('game-short-desc').innerText = project.short_desc;
         document.getElementById('game-full-desc').innerText = project.full_desc || "Описание проекта готовится к публикации.";
