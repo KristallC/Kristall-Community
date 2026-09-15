@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": "dev_kristall",
+        "username": "Kristall",
+        "avatar_url": "https://avavatar.ru/image/5246/download_image",
+        "bio": "Владелец KristallCommunity. Руковожу развитием сообщества и отвечаю за всё, что здесь происходит.",
+        "awards": [
+            { "icon": "✦", "name": "Отец", "desc": "За создание сайта и его поддержку несмотря на трудности" }
+        ]
+    }
+]
