@@ -59,7 +59,7 @@
     <!-- ГЛАВНЫЙ КОНТЕНТ (ДВУХКОЛОНОЧНЫЙ ХАБ) -->
     <main class="container" style="margin-top: 30px; margin-bottom: 50px;">
         <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-            
+
             <!-- ЛЕВАЯ КОЛОНКА: ЛЕНТА НОВОСТЕЙ (Занимает больше места) -->
             <div style="flex: 2; min-width: 300px;">
                 <h2 class="section-title">Свежие новости</h2>
@@ -71,6 +71,14 @@
             <!-- ПРАВАЯ КОЛОНКА: ИНТЕРАКТИВНЫЙ САЙДБАР -->
             <div style="flex: 1; min-width: 280px; display: flex; flex-direction: column; gap: 25px; font-family: sans-serif;">
                 
+                <!-- БЛОК СОБЫТИЙ СООБЩЕСТВА (Изначально скрыт, появляется только при наличии данных) -->
+                <div id="events-block" style="display: none; background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; box-shadow: 0 0 15px rgba(34, 211, 238, 0.02); box-sizing: border-box;">
+                    <h3 style="color: #22d3ee; font-size: 14px; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">📅 События сообщества</h3>
+                    <div id="events-container" style="display: flex; flex-direction: column; gap: 15px;">
+                        <!-- Сюда JS подставит динамические карточки ивентов -->
+                    </div>
+                </div>
+
                 <!-- БЛОК 1: МИНИ-ПРОФИЛЬ KRISTALL ID -->
                 <div style="background-color: #111827; border: 1px solid #1f2937; border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 0 15px rgba(34, 211, 238, 0.02);">
                     <h3 style="color: white; font-size: 14px; margin: 0 0 15px 0; text-transform: uppercase; letter-spacing: 1px; opacity: 0.6;">Мой Kristall ID</h3>
