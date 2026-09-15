@@ -174,7 +174,7 @@ async function loadProjectsPage() {
 }
 
 async function buildProjectTemplatePage() {
-    if (!document.getElementById('game-title')) return; 
+    if (!document.getElementById('project-title')) return;
 
     const urlParams = new URLSearchParams(window.location.search);
     const projectId = urlParams.get('project');
