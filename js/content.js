@@ -197,7 +197,35 @@ async function buildProjectTemplatePage() {
         
         document.getElementById('project-platform').innerText = project.platforms ? project.platforms.join(', ') : '-';
         document.getElementById('project-version').innerText = project.version;
-        document.getElementById('project-developer').innerText = project.developer || "Не указан";
+        // Вместо обычного текста создаем кликабельную ссылку на user-profile.html по id разработчика
+        const devTarget = document.getElementById('project-developer');
+        if (devTarget) {
+            if (project.developer && project.developer.trim() !== '') {
+                devTarget.innerHTML = `
+                    <a href="user-profile.html?user=${project.developer}" style="color: #22d3ee; text-decoration: none; font-weight: 600; border-bottom: 1px dashed rgba(34, 211, 238, 0.4); transition: 0.2s;" onmouseenter="this.style.color='#06b6d4'; this.style.borderBottomColor='#06b6d4'" onmouseleave="this.style.color='#22d3ee'; this.style.borderBottomColor='rgba(34, 211, 238, 0.4)'">
+                        Загрузка автора...
+                    </a>`;
+                
+                // Делаем асинхронный фоновый запрос, чтобы перевести системный ID в красивое имя
+                fetch('./databases/users.json')
+                    .then(res => res.json())
+                    .then(users => {
+                        const author = users.find(u => u.id === project.developer);
+                        const linkElement = devTarget.querySelector('a');
+                        if (linkElement && author) {
+                            linkElement.innerText = author.username; // Заменяем ID на реальный никнейм автора
+                        } else if (linkElement) {
+                            linkElement.innerText = project.developer; // Если автора нет в базе, оставляем ID
+                        }
+                    })
+                    .catch(() => {
+                        const linkElement = devTarget.querySelector('a');
+                        if (linkElement) linkElement.innerText = project.developer;
+                    });
+            } else {
+                devTarget.innerText = "Не указан";
+            }
+        }
 
         // ЧТО НОВОГО
         const whatsNewBlock = document.getElementById('whats-new-block');
@@ -889,5 +917,175 @@ async function loadCommunityEvents() {
     } catch (error) {
         console.error("Ошибка загрузки событий:", error);
         block.style.display = "none"; // В случае падения просто скрываем блок, чтобы не портить вид
+    }
+}
+
+// ==========================================
+// 3.Г. ЗАГРУЗКА И СБОРКА ПРОФИЛЯ РАЗРАБОТЧИКА
+// ==========================================
+async function loadDeveloperProfile() {
+    const usernameEl = document.getElementById('dev-username');
+    const bioEl = document.getElementById('dev-bio');
+    const avatarWrapper = document.getElementById('dev-avatar-wrapper');
+    const awardsContainer = document.getElementById('dev-awards-container');
+    const projectsGrid = document.getElementById('dev-projects-grid');
+    const projectsCountEl = document.getElementById('dev-projects-count');
+
+    if (!usernameEl || !bioEl || !projectsGrid) return;
+
+    // Считываем параметр ?user= из адресной строки браузера
+    const urlParams = new URLSearchParams(window.location.search);
+    const userId = urlParams.get('user');
+
+    if (!userId) {
+        window.location.href = 'projects.html'; // Если ID пользователя не передан — кидаем в каталог
+        return;
+    }
+
+    try {
+        // Параллельно загружаем базу пользователей и правильную базу проектов projects.json
+        const timestamp = new Date().getTime();
+        const [usersRes, gamesRes] = await Promise.all([
+            fetch('./databases/users.json?v=' + timestamp),
+            fetch('./databases/projects.json?v=' + timestamp)
+        ]);
+
+        if (!usersRes.ok || !gamesRes.ok) throw new Error("Не удалось загрузить базы данных");
+
+        const usersData = await usersRes.json();
+        const allGames = await gamesRes.json();
+
+        // 1. ИЩЕМ И ОТРИСОВЫВАЕМ ДАННЫЕ ОДНОГО ПОЛЬЗОВАТЕЛЯ
+        const user = usersData.find(u => u.id === userId);
+
+        if (!user) {
+            usernameEl.innerText = "Пользователь не найден";
+            bioEl.innerText = "Данный профиль ещё не зарегистрирован в Kristall ID.";
+            if (avatarWrapper) avatarWrapper.classList.remove('skeleton-shimmer');
+            return;
+        }
+
+        // Заполняем никнейм и био
+        usernameEl.innerText = user.username;
+        bioEl.innerText = user.bio || "Описание профиля отсутствует.";
+
+        // Умная отрисовка аватарки
+        if (avatarWrapper) {
+            avatarWrapper.classList.remove('skeleton-shimmer');
+            if (user.avatar_url && user.avatar_url.startsWith('http')) {
+                avatarWrapper.innerHTML = `<img src="${user.avatar_url}" style="width:100%; height:100%; object-fit:cover; display:block;">`;
+            } else {
+                avatarWrapper.innerHTML = `<svg viewBox="0 0 24 24" style="width:60%; height:60%; fill:#22d3ee;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>`;
+            }
+        }
+
+        // 2. ОТРИСОВКА НАГРАД (AWARDS)
+        if (awardsContainer) {
+            awardsContainer.innerHTML = '';
+            if (user.awards && Array.isArray(user.awards) && user.awards.length > 0) {
+                user.awards.forEach(award => {
+                    const awardCard = document.createElement('div');
+                    awardCard.style.cssText = "display: flex; align-items: center; gap: 12px; background: #1f2937; padding: 10px 14px; border-radius: 8px; border: 1px solid #1f2937; box-sizing: border-box;";
+                    
+                    awardCard.innerHTML = `
+                        <span style="font-size: 24px; flex-shrink: 0;">${award.icon || '🏆'}</span>
+                        <div style="text-align: left;">
+                            <div style="color: white; font-weight: bold; font-size: 13px;">${award.name}</div>
+                            <div style="color: #6b7280; font-size: 11px; margin-top: 2px; line-height: 1.3;">${award.desc}</div>
+                        </div>
+                    `;
+                    awardsContainer.appendChild(awardCard);
+                });
+            } else {
+                awardsContainer.innerHTML = `<p style="color: #4b5563; font-size: 13px; margin: 0; text-align: left;">У этого пользователя пока нет официальных наград.</p>`;
+            }
+        }
+
+        // 3. СКАН ПУТЕЙ И СБОРКА ПРОЕКТОВ ИМЕННО ЭТОГО РАЗРАБОТЧИКА
+        const authorProjects = allGames.filter(p => p.developer === userId);
+        
+        if (projectsCountEl) projectsCountEl.innerText = authorProjects.length;
+        projectsGrid.innerHTML = '';
+
+        if (authorProjects.length === 0) {
+            projectsGrid.innerHTML = '<p style="color: #9ca3af; grid-column: 1/-1; text-align: left;">Этот автор ещё не опубликовал ни одного проекта.</p>';
+            return;
+        }
+
+        // Отрисовываем проекты автора
+        authorProjects.forEach(project => {
+            const card = document.createElement('a');
+            card.href = `project-template.html?project=${project.id}`;
+            card.className = 'game-card'; 
+            
+            let badgesHTML = '';
+            if (project.platforms && Array.isArray(project.platforms)) {
+                project.platforms.forEach(plat => {
+                    const color = plat.toLowerCase() === 'windows' ? '#3b82f6' : (plat.toLowerCase() === 'android' ? '#10b981' : '#a855f7');
+                    badgesHTML += `<span class="badge" style="background-color: ${color}; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; white-space: nowrap;">${plat}</span>`;
+                });
+            }
+
+            const hasImages = project.screenshots && project.screenshots.length > 0;
+            const coverSrc = hasImages ? project.screenshots[0].src : ''; 
+            
+            let coverHTML = '';
+            if (hasImages) {
+                coverHTML = `
+                    <div class="cover-skeleton skeleton-shimmer" style="width: 100%; height: 130px; position: relative; background-color: #070a12;">
+                        <img src="${coverSrc}" class="card-cover-img" style="width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0; transition: transform 0.3s ease, opacity 0.3s ease-in-out;">
+                    </div>`;
+            } else {
+                coverHTML = `
+                    <div style="width: 100%; height: 130px; background: linear-gradient(135deg, #070a12, #0f172a); display: flex; align-items: center; justify-content: center; position: relative;">
+                        <svg xmlns="http://w3.org" viewBox="0 0 24 24" width="48" height="48" style="filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.4));">
+                            <circle cx="12" cy="12" r="9" fill="none" stroke="#22d3ee" stroke-width="1" stroke-dasharray="4 2" opacity="0.4" />
+                            <path d="M12 2 L19 9 L12 22 L5 9 Z" fill="none" stroke="#22d3ee" stroke-width="1.5" />
+                            <path d="M12 2 L12 22 M5 9 L19 9 M12 2 L5 9 L14 14 L19 9 L12 2" fill="none" stroke="#22d3ee" stroke-width="1" opacity="0.7" />
+                        </svg>
+                    </div>`;
+            }
+            
+            card.innerHTML = `
+                <div class="cover-wrapper" style="width: 100%; height: 130px; overflow: hidden; position: relative; border-bottom: 1px solid #1f2937;">
+                    ${coverHTML}
+                </div>
+                <div class="card-body-content" style="padding: 15px; display: flex; flex-direction: column; gap: 8px; flex-grow: 1;">
+                    <div class="card-header" style="display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; width: 100%; min-height: 42px;">
+                        <h3 style="margin: 0; color: white; font-size: 16px; font-weight: bold; text-align: left; line-height: 1.3; word-break: break-word;">${project.title}</h3>
+                        <div class="badges-wrapper" style="display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; padding-top: 2px;">${badgesHTML}</div>
+                    </div>
+                    <p class="card-desc" style="margin: 0; text-align: left; color: #9ca3af; font-size: 12px; line-height: 1.5; min-height: 36px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;">
+                        ${project.short_desc}
+                    </p>
+                    <div class="card-footer" style="margin-top: auto; width: 100%; text-align: center; color: #22d3ee; font-weight: bold; font-size: 13px; padding-top: 10px; border-top: 1px solid rgba(31, 41, 55, 0.5);">
+                        Подробнее →
+                    </div>
+                </div>
+            `;
+
+            const img = card.querySelector('.card-cover-img');
+            if (img) {
+                img.onload = () => {
+                    const skeleton = card.querySelector('.cover-skeleton');
+                    if (skeleton) skeleton.classList.remove('skeleton-shimmer');
+                    img.style.opacity = "1";
+                };
+                img.onerror = () => {
+                    const skeleton = card.querySelector('.cover-skeleton');
+                    if (skeleton) {
+                        skeleton.classList.remove('skeleton-shimmer');
+                        skeleton.innerHTML = '<span style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #4b5563; font-size: 11px;">⚠️ Ошибка</span>';
+                    }
+                };
+            }
+
+            projectsGrid.appendChild(card);
+        });
+
+    } catch (e) {
+        console.error("Ошибка прогрузки профиля разработчика:", e);
+        if (usernameEl) usernameEl.innerText = "Ошибка загрузки";
+        projectsGrid.innerHTML = '<p style="color: #ef4444; text-align: left;">❌ Не удалось подключиться к базе данных Kristall Hub.</p>';
     }
 }
