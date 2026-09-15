@@ -2,8 +2,8 @@
 // 1. ЕДИНЫЙ ГЛАВНЫЙ СЛУШАТЕЛЬ СОБЫТИЙ И КЛИКОВ (DOM)
 // ==========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Конвейер параллельной загрузки новостей, проектов и маркетплейса
-    Promise.all([loadNews(), loadProjectsPage(), buildProjectTemplatePage(), loadMarketplacePage()])
+    // 1. Конвейер параллельной загрузки новостей, проектов, маркетплейса и СОБЫТИЙ
+    Promise.all([loadNews(), loadProjectsPage(), buildProjectTemplatePage(), loadMarketplacePage(), loadCommunityEvents()])
         .then(() => { 
             if (typeof initFiltersAndSearch === 'function') initFiltersAndSearch(); 
             if (typeof initMarketplaceFilters === 'function') initMarketplaceFilters();
