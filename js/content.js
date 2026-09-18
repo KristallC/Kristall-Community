@@ -323,7 +323,7 @@ async function buildProjectTemplatePage() {
                     btn.addEventListener('mouseenter', () => btn.style.backgroundColor = btnHoverColor);
                     btn.addEventListener('mouseleave', () => btn.style.backgroundColor = btnColor);
 
-                    const fileWeight = link.size ? ` | ${link.size}` : ''; 
+                    const fileWeight = link.size ? `${link.size}` : '';
                     
                     btn.innerHTML = `
                         ${iconSVG ? iconSVG : ''}
