@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Allow: /databases/
+
+Sitemap: https://kristallc.github.io/Kristall-Community/sitemap.xml
