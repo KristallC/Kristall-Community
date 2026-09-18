@@ -1,18 +1,30 @@
-/* Базовые сбросы */
+/* ==========================================================================
+   1. БАЗОВЫЕ СБРОСЫ И ГЛОБАЛЬНЫЕ СТИЛИ ФОНА
+   ========================================================================== */
 body {
     background-color: #0b0f19;
     color: #e5e7eb;
     font-family: 'Segoe UI', system-ui, sans-serif;
     margin: 0;
     padding: 0;
+    animation: spaceGlow 15s ease-in-out infinite alternate;
 }
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 20px;
 }
 
-/* Шапка сайта */
+@keyframes spaceGlow {
+    0% { background-color: #0b0f19; }
+    50% { background-color: #0a0d14; box-shadow: inset 0 0 100px rgba(34, 211, 238, 0.02); }
+    100% { background-color: #0d0914; box-shadow: inset 0 0 100px rgba(168, 85, 247, 0.01); }
+}
+
+/* ==========================================================================
+   2. ШАПКА САЙТА И МЕНЮ НАВИГАЦИИ (ПК-ВЕРСИЯ)
+   ========================================================================== */
 header {
     background-color: #111827;
     border-bottom: 1px solid #1f2937;
@@ -21,11 +33,13 @@ header {
     top: 0;
     z-index: 100;
 }
+
 .header-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .logo {
     font-size: 24px;
     font-weight: bold;
@@ -33,6 +47,7 @@ header {
     text-decoration: none;
     text-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
 }
+
 nav ul {
     list-style: none;
     display: flex;
@@ -40,6 +55,7 @@ nav ul {
     margin: 0;
     padding: 0;
 }
+
 nav a {
     color: #9ca3af;
     text-decoration: none;
@@ -47,11 +63,12 @@ nav a {
     font-size: 15px;
     transition: color 0.3s;
 }
+
 nav a:hover, nav a.active {
     color: #10b981;
 }
 
-/* Кнопка бургера (скрыта на ПК) */
+/* Кнопка бургера (Общие базовые стили) */
 .burger-menu {
     display: none;
     flex-direction: column;
@@ -64,6 +81,7 @@ nav a:hover, nav a.active {
     padding: 0;
     z-index: 110;
 }
+
 .burger-menu span {
     width: 100%;
     height: 2px;
@@ -71,7 +89,7 @@ nav a:hover, nav a.active {
     transition: all 0.3s ease;
 }
 
-/* Заготовка под аватар профиля в мобильном меню */
+/* Мобильный профиль внутри шторки меню */
 .menu-profile {
     display: none;
     align-items: center;
@@ -80,6 +98,7 @@ nav a:hover, nav a.active {
     border-bottom: 1px solid #1f2937;
     margin-bottom: 25px;
 }
+
 .menu-avatar {
     width: 45px;
     height: 45px;
@@ -87,79 +106,31 @@ nav a:hover, nav a.active {
     border: 2px solid #22d3ee;
     object-fit: cover;
 }
+
 .menu-username {
     font-weight: bold;
     color: white;
     font-size: 16px;
 }
 
-/* =======================================================
-   АДАПТИВНОСТЬ ДЛЯ СМАРТФОНОВ (Экраны меньше 768px)
-   ======================================================= */
-@media (max-width: 768px) {
-    .burger-menu {
-        display: flex; /* Показываем 3 полоски на смартфонах */
-    }
-
-    /* Превращаем навигацию в скрытую шторку справа */
-    nav {
-        position: fixed;
-        top: 0;
-        right: -100%; /* Полностью прячем за правый край экрана */
-        width: 260px;
-        height: 100%;
-        background-color: #111827;
-        border-left: 1px solid #1f2937;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
-        padding: 80px 24px 24px 24px;
-        box-sizing: border-box;
-        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Плавное выезжание */
-        z-index: 105;
-    }
-
-    /* Класс, который JS добавит при клике на бургер */
-    nav.open {
-        right: 0; /* Меню выезжает на экран */
-    }
-
-    nav ul {
-        flex-direction: column; /* Ссылки встают друг под друга */
-        gap: 20px;
-    }
-
-    nav a {
-        font-size: 18px; /* Увеличиваем ссылки, чтобы по ним было легко тапать пальцем */
-        display: block;
-    }
-
-    .menu-profile {
-        display: flex; /* Показываем аватарку только внутри шторки на мобилках */
-    }
-
-    /* Анимация бургера: превращаем 3 полоски в красивый крестик X */
-    .burger-menu.open span:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 6px);
-    }
-    .burger-menu.open span:nth-child(2) {
-        opacity: 0;
-        transform: translateX(-10px);
-    }
-    .burger-menu.open span:nth-child(3) {
-        transform: rotate(-45deg) translate(5px, -6px);
-    }
-}
-
-/* Баннер приветствия */
+/* ==========================================================================
+   3. ГЛАВНЫЙ МАКЕТ ХАБА, БАННЕРЫ И СЕКЦИИ
+   ========================================================================== */
 .hero {
     text-align: center;
     padding: 50px 0;
     background: linear-gradient(180deg, #111827 0%, #0b0f19 100%);
 }
+
 .hero h1 {
     font-size: 40px;
     margin-bottom: 10px;
 }
-.hero h1 span { color: #22d3ee; }
+
+.hero h1 span { 
+    color: #22d3ee; 
+}
+
 .hero p {
     color: #9ca3af;
     max-width: 600px;
@@ -168,13 +139,13 @@ nav a:hover, nav a.active {
     line-height: 1.6;
 }
 
-/* Двухколоночный макет (Игры слева, Новости справа) */
 .main-layout {
     display: flex;
     gap: 40px;
     margin-top: 30px;
     margin-bottom: 60px;
 }
+
 .projects-section { flex: 2; }
 .news-section { flex: 1; min-width: 300px; }
 
@@ -186,35 +157,48 @@ nav a:hover, nav a.active {
     margin-bottom: 25px;
 }
 
-/* Мощные карточки игр */
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
 }
-.game-card {
-    background-color: #1f2937;
-    border: 1px solid #374151;
-    border-radius: 10px;
-    padding: 20px;
-    text-decoration: none;
-    color: inherit;
+
+/* ==========================================================================
+   4. СОВРЕМЕННЫЕ КАРТОЧКИ ПРОЕКТОВ (STEAM STYLE)
+   ========================================================================== */
+.project-card {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    transition: all 0.3s ease;
+    justify-content: flex-start;
+    align-items: stretch;
+    overflow: hidden;
+    padding: 0 !important;
+    background: #111827 !important;
+    border: 1px solid #1f2937 !important;
+    border-radius: 12px !important;
+    text-decoration: none !important;
+    color: inherit;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s !important;
 }
-.game-card:hover {
-    transform: translateY(-4px);
-    border-color: #10b981;
-    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+
+.project-card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 12px 25px rgba(34, 211, 238, 0.15) !important;
+    border-color: #22d3ee !important;
 }
+
+.project-card:hover .card-cover-img {
+    transform: scale(1.06) !important;
+}
+
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
+
 .card-header h3 { margin: 0; color: white; font-size: 18px; }
+
 .badge {
     background-color: #10b981;
     color: white;
@@ -223,128 +207,127 @@ nav a:hover, nav a.active {
     font-size: 11px;
     font-weight: bold;
 }
+
 .card-desc { color: #9ca3af; font-size: 14px; line-height: 1.5; margin: 15px 0; }
 .card-footer { color: #22d3ee; font-size: 13px; text-align: right; font-weight: 500; }
 
-/* Дизайн блока новостей */
+/* ==========================================================================
+   5. ИНТЕРФЕЙС УМНОЙ ЛЕНТЫ НОВОСТЕЙ С КОЛЛАЖАМИ КАРТИНОК
+   ========================================================================== */
 .news-container {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
+
 .news-item {
     background-color: #111827;
     border: 1px solid #1f2937;
-    border-radius: 8px;
-    padding: 15px;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 25px !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s ease, border-color 0.2s ease;
     animation: slideIn 0.3s ease;
 }
-.news-date { font-size: 11px; color: #10b981; font-weight: bold; }
-.news-title { font-size: 15px; color: white; margin: 5px 0; font-weight: 600; }
-.news-text { font-size: 13px; color: #9ca3af; margin: 0; line-height: 1.4; }
+
+.news-item:hover {
+    border-color: #22d3ee;
+    transform: translateY(-2px);
+}
+
+.news-item .news-title {
+    color: #ffffff !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.news-item .news-text {
+    color: #e5e7eb !important;
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+}
+
+.news-item .news-date {
+    color: #22d3ee !important;
+    font-size: 11px !important;
+    letter-spacing: 1px;
+    margin-bottom: 6px !important;
+}
 
 @keyframes slideIn {
     from { opacity: 0; transform: translateY(-10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Подвал */
-footer {
-    background-color: #070a12;
-    border-top: 1px solid #1f2937;
-    padding: 20px 0;
-    text-align: center;
-    color: #4b5563;
-    font-size: 13px;
-}
-
-/* Адаптивность для телефонов */
-@media (max-width: 768px) {
-    .main-layout { flex-direction: column; }
-    .hero h1 { font-size: 30px; }
-}
-
-/* Кнопка бургера */
-.burger-menu {
-    display: none;
-    flex-direction: column;
-    justify-content: space-between;
-    width: 24px;
-    height: 18px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    z-index: 100;
-}
-.burger-menu span {
+/* Сетка изображений для новостного коллажа */
+.news-images-grid {
+    display: grid;
+    gap: 8px;
+    margin-top: 15px;
+    border-radius: 10px;
+    overflow: hidden;
     width: 100%;
-    height: 2px;
-    background-color: white;
-    transition: all 0.3s ease;
 }
 
-/* Блок профиля в меню (скрыт на ПК) */
-.menu-profile {
-    display: none;
-    align-items: center;
-    gap: 12px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #1f2937;
-    margin-bottom: 20px;
+.news-images-grid.count-1 { grid-template-columns: 1fr; }
+.news-images-grid.count-2 { grid-template-columns: 1fr 1fr; }
+.news-images-grid.count-3 { grid-template-columns: 2fr 1fr; grid-template-rows: 120px 120px; }
+.news-images-grid.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 120px 120px; }
+
+.news-images-grid.count-3 .news-img-wrapper:nth-child(1) {
+    grid-row: span 2;
+    height: 248px;
 }
-.menu-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 2px solid #22d3ee;
+
+.news-img-wrapper {
+    position: relative;
+    width: 100%;
+    height: 180px;
+    background-color: #070a12;
+    overflow: hidden;
+}
+
+.news-images-grid.count-1 .news-img-wrapper {
+    height: 280px;
+}
+
+.news-img-item {
+    width: 100%;
+    height: 100%;
     object-fit: cover;
+    display: block;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease;
 }
-.menu-username {
-    font-weight: bold;
-    color: white;
+
+.news-img-item:hover {
+    transform: scale(1.03);
 }
 
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-    .burger-menu {
-        display: flex; /* Показываем полоски на телефонах */
-    }
-
-    nav {
-        position: fixed;
-        top: 0;
-        right: -100%; /* Прячем меню за правый экран */
-        width: 250px;
-        height: 100%;
-        background-color: #111827;
-        box-shadow: -5px 0 15px rgba(0,0,0,0.5);
-        padding: 80px 20px 20px 20px;
-        box-sizing: border-box;
-        transition: right 0.3s ease;
-        z-index: 99;
-    }
-
-    nav.open {
-        right: 0; /* Выезжает при добавлении класса .open */
-    }
-
-    nav ul {
-        flex-direction: column; /* Ссылки встают в столбик */
-        gap: 20px;
-    }
-
-    .menu-profile {
-        display: flex; /* Показываем аватарку в меню на мобилках */
-    }
+/* Скелетоны мерцания */
+.skeleton-shimmer {
+    background: linear-gradient(90deg, #070a12 25%, #111827 50%, #070a12 75%);
+    background-size: 200% 100%;
+    animation: shimmer-wave 1.5s infinite linear;
 }
-/* Стили для строки поиска при фокусе */
+
+@keyframes shimmer-wave {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ==========================================================================
+   6. ПОИСК, ФИЛЬТРЫ И ДИНАМИЧЕСКИЕ ТОАСТЫ-УВЕДОМЛЕНИЯ
+   ========================================================================== */
 #search-input:focus {
     border-color: #22d3ee !important;
     box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+    outline: none;
 }
 
-/* Красивые неоновые кнопки фильтров */
 .filter-btn {
     background-color: #111827;
     border: 1px solid #374151;
@@ -356,10 +339,12 @@ footer {
     cursor: pointer;
     transition: all 0.2s ease;
 }
+
 .filter-btn:hover {
     color: white;
     border-color: #9ca3af;
 }
+
 .filter-btn.active {
     background-color: #1f2937;
     color: #22d3ee;
@@ -367,141 +352,13 @@ footer {
     box-shadow: 0 0 12px rgba(34, 211, 238, 0.15);
 }
 
-/* КРАСИВОЕ МОДАЛЬНОЕ ОКНО КРИСТАЛЛ ID */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(11, 15, 25, 0.8);
-    backdrop-filter: blur(8px); /* Крутое размытие заднего плана */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 200;
-}
-.modal-content {
-    background-color: #111827;
-    border: 1px solid #374151;
-    border-radius: 12px;
-    padding: 30px;
-    width: 100%;
-    max-width: 400px;
-    position: relative;
-    box-shadow: 0 0 25px rgba(34, 211, 238, 0.15);
-    box-sizing: border-box;
-}
-.modal-close {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    background: transparent;
-    border: none;
-    color: #9ca3af;
-    font-size: 24px;
-    cursor: pointer;
-}
-.modal-close:hover { color: #ef4444; }
-
-/* Переключатели Вход / Регистрация */
-.modal-tabs {
-    display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #1f2937;
-    padding-bottom: 10px;
-}
-.tab-btn {
-    background: transparent;
-    border: none;
-    color: #9ca3af;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    padding: 5px 10px;
-    transition: all 0.3s ease;
-}
-.tab-btn.active {
-    color: #22d3ee;
-    border-bottom: 2px solid #22d3ee;
+.add-project-btn:hover {
+    border-color: #22d3ee !important;
+    background-color: #111827 !important;
+    box-shadow: 0 0 15px rgba(34, 211, 238, 0.25) !important;
+    transform: scale(1.05);
 }
 
-/* Настройки полей ввода */
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.auth-form input {
-    padding: 12px;
-    background-color: #1f2937;
-    border: 1px solid #374151;
-    color: white;
-    border-radius: 6px;
-    font-size: 14px;
-    outline: none;
-    transition: border-color 0.3s;
-}
-.auth-form input:focus {
-    border-color: #22d3ee;
-    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
-}
-.auth-submit-btn {
-    background-color: #10b981;
-    color: white;
-    border: none;
-    padding: 12px;
-    border-radius: 6px;
-    font-weight: bold;
-    font-size: 15px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-.auth-submit-btn:hover {
-    background-color: #059669;
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
-}
-
-/* Адаптивное управление отображением профилей */
-@media (min-width: 769px) {
-    .mobile-profile-block {
-        display: none !important; /* На ПК мобильный блок намертво скрыт */
-    }
-}
-
-@media (max-width: 768px) {
-    .pc-profile-block {
-        display: none !important; /* На смартфонах ПК-блок полностью исчезает */
-    }
-    .mobile-profile-block {
-        display: flex !important; /* Внутри шторки на телефонах блок плавно появляется */
-    }
-}
-
-/* ЭФФЕКТЫ ДЛЯ КНОПОК НАГРАД */
-#btn-daily-bonus:hover {
-    background-color: #10b981 !important;
-    color: #111827 !important;
-    box-shadow: 0 0 15px #10b981 !important;
-}
-#btn-lucky-chest:hover {
-    background-color: #f59e0b !important;
-    color: #111827 !important;
-    box-shadow: 0 0 15px #f59e0b !important;
-}
-
-/* МЯГКАЯ ГЕЙМЕРСКАЯ АНИМАЦИЯ ФОНА САЙТА */
-body {
-    animation: spaceGlow 15s ease-in-out infinite alternate;
-}
-@keyframes spaceGlow {
-    0% { background-color: #0b0f19; }
-    50% { background-color: #0a0d14; box-shadow: inset 0 0 100px rgba(34, 211, 238, 0.02); } /* Едва заметный циановый отлив */
-    100% { background-color: #0d0914; box-shadow: inset 0 0 100px rgba(168, 85, 247, 0.01); } /* Едва заметный фиолетовый отлив */
-}
-
-/* ФИРМЕННЫЕ ВСПОЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ KRISTALL (БЕЗ ALERT) */
 #kristall-toast {
     position: fixed;
     top: -100px;
@@ -522,153 +379,208 @@ body {
     align-items: center;
     gap: 10px;
 }
+
 #kristall-toast.show {
-    top: 25px; /* Выезжает сверху */
+    top: 25px;
 }
 
-/* Стиль для современной кнопки-плюса */
-.add-project-btn:hover {
-    border-color: #22d3ee !important;
-    background-color: #111827 !important;
-    box-shadow: 0 0 15px rgba(34, 211, 238, 0.25) !important;
-    transform: scale(1.05);
+#btn-daily-bonus:hover {
+    background-color: #10b981 !important;
+    color: #111827 !important;
+    box-shadow: 0 0 15px #10b981 !important;
 }
 
-/* Добавим легкий фокус для инпута, чтобы сочетался */
-#search-input:focus {
-    border-color: #374151;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.02);
-}
-
-/* Эффект мерцания Skeleton Shimmer для скриншотов */
-.skeleton-shimmer {
-    background: linear-gradient(90deg, #070a12 25%, #111827 50%, #070a12 75%);
-    background-size: 200% 100%;
-    animation: shimmer-wave 1.5s infinite linear;
-}
-
-@keyframes shimmer-wave {
-    0% { background-position: 200% 0; }
-    100% { background-position: -200% 0; }
+#btn-lucky-chest:hover {
+    background-color: #f59e0b !important;
+    color: #111827 !important;
+    box-shadow: 0 0 15px #f59e0b !important;
 }
 
 /* ==========================================================================
-   СОВРЕМЕННЫЕ КАРТОЧКИ КАТАЛОГА KRISTALL COMMUNITY (STEAM STYLE)
+   7. МОДАЛЬНЫЕ ОКНА И АВТОРИЗАЦИЯ (KRISTALL ID)
    ========================================================================== */
-.game-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
-    overflow: hidden;
-    padding: 0 !important;
-    background: #111827 !important;
-    border: 1px solid #1f2937 !important;
-    border-radius: 12px !important;
-    text-decoration: none !important;
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s !important;
-}
-
-/* Эффект наведения на всю карточку */
-.game-card:hover {
-    transform: translateY(-5px) !important;
-    box-shadow: 0 12px 25px rgba(34, 211, 238, 0.15) !important;
-    border-color: #22d3ee !important;
-}
-
-/* Плавное приближение картинки-обложки при наведении */
-.game-card:hover .card-cover-img {
-    transform: scale(1.06) !important;
-}
-
-/* ==========================================================================
-   УМНАЯ ЛЕНТА НОВОСТЕЙ С КОЛЛАЖАМИ КАРТИНОК
-   ========================================================================== */
-
-/* Сама новостная карточка: добавляем "дышащие" отступы */
-.news-item {
-    background-color: #111827;
-    border: 1px solid #1f2937;
-    border-radius: 14px;
-    padding: 20px;
-    margin-bottom: 25px !important; /* Увеличили отступ, чтобы новости не лепились */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    transition: transform 0.2s ease, border-color 0.2s ease;
-}
-
-.news-item:hover {
-    border-color: #22d3ee;
-    transform: translateY(-2px);
-}
-
-/* Общий контейнер для коллажа картинок */
-.news-images-grid {
-    display: grid;
-    gap: 8px;
-    margin-top: 15px;
-    border-radius: 10px;
-    overflow: hidden; /* Скругляем углы всему коллажу сразу */
-    width: 100%;
-}
-
-/* Логика изменения сетки в зависимости от количества картинок */
-.news-images-grid.count-1 { grid-template-columns: 1fr; }
-.news-images-grid.count-2 { grid-template-columns: 1fr 1fr; }
-.news-images-grid.count-3 { grid-template-columns: 2fr 1fr; grid-template-rows: 120px 120px; }
-.news-images-grid.count-4 { grid-template-columns: 1fr 1fr; grid-template-rows: 120px 120px; }
-
-/* Специфичное выравнивание для 3-х картинок (одна большая слева, две маленькие справа) */
-.news-images-grid.count-3 .news-img-wrapper:nth-child(1) {
-    grid-row: span 2;
-    height: 248px;
-}
-
-/* Обертка для каждой отдельной картинки, чтобы работали скелетоны мерцания */
-.news-img-wrapper {
-    position: relative;
-    width: 100%;
-    height: 180px; /* Дефолтная высота для 1 и 2 картинок */
-    background-color: #070a12;
-    overflow: hidden;
-}
-
-/* Если картинка одна — делаем её повыше и сочнее */
-.news-images-grid.count-1 .news-img-wrapper {
-    height: 280px;
-}
-
-/* Сами изображения внутри коллажа */
-.news-img-item {
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    display: block;
+    background-color: rgba(11, 15, 25, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+}
+
+.modal-content {
+    background-color: #111827;
+    border: 1px solid #374151;
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 0 25px rgba(34, 211, 238, 0.15);
+    box-sizing: border-box;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 24px;
     cursor: pointer;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease;
 }
 
-.news-img-item:hover {
-    transform: scale(1.03);
+.modal-close:hover { 
+    color: #ef4444; 
 }
 
-/* Возвращаем сочные краски тексту внутри новостей */
-.news-item .news-title {
-    color: #ffffff !important;         /* Кристально белый цвет для заголовка */
-    font-size: 19px !important;        /* Немного увеличим для солидности */
-    font-weight: 700 !important;
-    text-shadow: 0 0 10px rgba(255, 255, 255, 0.1); /* Легкий футуристичный объем */
+.modal-tabs {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #1f2937;
+    padding-bottom: 10px;
 }
 
-.news-item .news-text {
-    color: #e5e7eb !important;         /* Сочный, контрастный и мягкий светло-серый цвет */
-    font-size: 14px !important;        /* Идеальный размер для чтения */
-    line-height: 1.6 !important;       /* Хороший межстрочный интервал, чтобы глаза не уставали */
+.tab-btn {
+    background: transparent;
+    border: none;
+    color: #9ca3af;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 5px 10px;
+    transition: all 0.3s ease;
 }
 
-.news-item .news-date {
-    color: #22d3ee !important;         /* Подсветим дату твоим фирменным неоновым циановым цветом! */
-    font-size: 11px !important;
-    letter-spacing: 1px;               /* Легкий хай-тек отступ между буквами */
-    margin-bottom: 6px !important;
+.tab-btn.active {
+    color: #22d3ee;
+    border-bottom: 2px solid #22d3ee;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-form input {
+    padding: 12px;
+    background-color: #1f2937;
+    border: 1px solid #374151;
+    color: white;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.auth-form input:focus {
+    border-color: #22d3ee;
+    box-shadow: 0 0 10px rgba(34, 211, 238, 0.2);
+}
+
+.auth-submit-btn {
+    background-color: #10b981;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.auth-submit-btn:hover {
+    background-color: #059669;
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+@media (min-width: 769px) {
+    .mobile-profile-block { display: none !important; }
+}
+
+@media (max-width: 768px) {
+    .pc-profile-block { display: none !important; }
+    .mobile-profile-block { display: flex !important; }
+}
+
+/* ==========================================================================
+   8. ПОДВАЛ И КОПИРАЙТЫ
+   ========================================================================== */
+footer {
+    background-color: #070a12;
+    border-top: 1px solid #1f2937;
+    padding: 20px 0;
+    text-align: center;
+    color: #4b5563;
+    font-size: 13px;
+}
+
+/* ==========================================================================
+   9. ЕДИНЫЙ СУПЕР-БЛОК АДАПТИВНОСТИ ДЛЯ СМАРТФОНОВ (Меньше 768px)
+   ========================================================================== */
+@media (max-width: 768px) {
+    .main-layout { 
+        flex-direction: column; 
+    }
+    
+    .hero h1 { 
+        font-size: 30px; 
+    }
+
+    .burger-menu {
+        display: flex;
+    }
+
+    nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 250px;
+        height: 100%;
+        background-color: #111827;
+        border-left: 1px solid #1f2937;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.5);
+        padding: 80px 20px 20px 20px;
+        box-sizing: border-box;
+        transition: right 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 105;
+    }
+
+    nav.open {
+        right: 0;
+    }
+
+    nav ul {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    nav a {
+        font-size: 18px;
+        display: block;
+    }
+
+    .menu-profile {
+        display: flex;
+    }
+
+    .burger-menu.open span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px);
+    }
+    .burger-menu.open span:nth-child(2) {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    .burger-menu.open span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
 }
