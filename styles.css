@@ -211,6 +211,41 @@ nav a:hover, nav a.active {
 .card-desc { color: #9ca3af; font-size: 14px; line-height: 1.5; margin: 15px 0; }
 .card-footer { color: #22d3ee; font-size: 13px; text-align: right; font-weight: 500; }
 
+/* Особое золотое премиум-выделение для Избранных проектов */
+.project-card.is-featured {
+    border-color: rgba(245, 158, 11, 0.4) !important;
+    box-shadow: 0 0 15px rgba(245, 158, 11, 0.05);
+    position: relative;
+}
+
+/* При наведении золотая карточка начинает сиять в полную силу */
+.project-card.is-featured:hover {
+    border-color: #f59e0b !important;
+    box-shadow: 0 12px 25px rgba(245, 158, 11, 0.25) !important;
+}
+
+/* Превращаем "ТОП" в парящий ярлык поверх обложки в стиле Steam */
+.featured-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 10;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%) !important;
+    color: #111827 !important;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.5);
+}
+
+/* ИСПРАВЛЕНО: Меняем цвет "Подробнее" у золотых карточек для идеального сочетания */
+.project-card.is-featured .card-footer {
+    color: #f59e0b !important;
+}
+
 /* ==========================================================================
    5. ИНТЕРФЕЙС УМНОЙ ЛЕНТЫ НОВОСТЕЙ С КОЛЛАЖАМИ КАРТИНОК
    ========================================================================== */
