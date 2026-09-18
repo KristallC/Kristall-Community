@@ -97,7 +97,13 @@ async function loadProjectsPage() {
         filteredProjects.forEach(project => {
             const card = document.createElement('a');
             card.href = `project-template.html?project=${project.id}`;
-            card.className = 'project-card'; 
+            
+            // Навешиваем класс в зависимости от флага
+            if (project.is_featured === true) {
+                card.className = 'project-card is-featured';
+            } else {
+                card.className = 'project-card';
+            }
             
             let badgesHTML = '';
             if (project.platforms && Array.isArray(project.platforms)) {
@@ -106,6 +112,10 @@ async function loadProjectsPage() {
                     badgesHTML += `<span class="badge" style="background-color: ${color}; padding: 3px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; color: white; white-space: nowrap;">${plat}</span>`;
                 });
             }
+
+            // ИСПРАВЛЕНО: Убрали склеивание ТОП-написи с платформами. 
+            // Теперь ярлык создается отдельно и только внутри обложки!
+            const topLabelHTML = project.is_featured === true ? `<span class="featured-badge">ТОП</span>` : '';
 
             const hasImages = project.screenshots && project.screenshots.length > 0;
             const coverSrc = hasImages ? project.screenshots[0].src : ''; 
@@ -129,7 +139,9 @@ async function loadProjectsPage() {
             }
             
             card.innerHTML = `
+                <!-- Вставляем topLabelHTML прямо сюда, чтобы он парил поверх картинки -->
                 <div class="cover-wrapper" style="width: 100%; height: 130px; overflow: hidden; position: relative; border-bottom: 1px solid #1f2937;">
+                    ${topLabelHTML}
                     ${coverHTML}
                 </div>
                 
@@ -143,22 +155,19 @@ async function loadProjectsPage() {
                         ${project.short_desc}
                     </p>
                     
-                    <div class="card-footer" style="margin-top: auto; width: 100%; text-align: center; color: #22d3ee; font-weight: bold; font-size: 13px; padding-top: 10px; border-top: 1px solid rgba(31, 41, 55, 0.5);">
+                    <div class="card-footer" style="margin-top: auto; width: 100%; text-align: center; font-weight: bold; font-size: 13px; padding-top: 10px; border-top: 1px solid rgba(31, 41, 55, 0.5);">
                         Подробнее →
                     </div>
                 </div>
             `;
 
-            // ЛОГИКА ОТКЛЮЧЕНИЯ МЕРЦАНИЯ ПОСЛЕ СКАЧИВАНИЯ КАРТИНКИ
             const img = card.querySelector('.card-cover-img');
             if (img) {
                 img.onload = () => {
                     const skeleton = card.querySelector('.cover-skeleton');
-                    if (skeleton) skeleton.classList.remove('skeleton-shimmer'); // Выключаем свет
-                    img.style.opacity = "1"; // Плавно проявляем обложку
+                    if (skeleton) skeleton.classList.remove('skeleton-shimmer');
+                    img.style.opacity = "1";
                 };
-                
-                // Если картинка упала с ошибкой — оставляем аккуратный темный фон
                 img.onerror = () => {
                     const skeleton = card.querySelector('.cover-skeleton');
                     if (skeleton) {
