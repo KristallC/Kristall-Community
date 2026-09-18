@@ -66,16 +66,16 @@ async function loadProjectsPage() {
     const gridContainer = document.getElementById('projects-grid');
     if (!gridContainer) return;
     try {
-        if (allGamesData.length === 0) {
-            const response = await fetch(GAMES_URL + '?v=' + new Date().getTime());
-            allGamesData = await response.json();
+        if (allProjectsData.length === 0) {
+            const response = await fetch(PROJECTS_URL + '?v=' + new Date().getTime());
+            allProjectsData = await response.json();
         }
         const searchInput = document.getElementById('search-input');
         const searchText = searchInput ? searchInput.value.toLowerCase().trim() : '';
         
         gridContainer.innerHTML = ''; 
 
-        const filteredProjects = allGamesData.filter(project => {
+        const filteredProjects = allProjectsData.filter(project => {
             const matchesSearch = project.title.toLowerCase().includes(searchText);
             const matchesType = (currentTypeFilter === 'all' || project.type === currentTypeFilter);
             
@@ -97,7 +97,7 @@ async function loadProjectsPage() {
         filteredProjects.forEach(project => {
             const card = document.createElement('a');
             card.href = `project-template.html?project=${project.id}`;
-            card.className = 'game-card'; 
+            card.className = 'project-card'; 
             
             let badgesHTML = '';
             if (project.platforms && Array.isArray(project.platforms)) {
@@ -181,12 +181,12 @@ async function buildProjectTemplatePage() {
     if (!projectId) { window.location.href = 'projects.html'; return; }
 
     try {
-        if (allGamesData.length === 0) {
+        if (allProjectsData.length === 0) {
             // Добавляем ?v=, чтобы обойти любой кэш папок
-            const response = await fetch(GAMES_URL + '?v=' + new Date().getTime());
-            allGamesData = await response.json();
+            const response = await fetch(PROJECTS_URL + '?v=' + new Date().getTime());
+            allProjectsData = await response.json();
         }
-        const project = allGamesData.find(p => p.id === projectId);
+        const project = allProjectsData.find(p => p.id === projectId);
         if (!project) return;
 
         // Заполнение текстов
@@ -945,15 +945,15 @@ async function loadDeveloperProfile() {
     try {
         // Параллельно загружаем базу пользователей и правильную базу проектов projects.json
         const timestamp = new Date().getTime();
-        const [usersRes, gamesRes] = await Promise.all([
+        const [usersRes, projectsRes] = await Promise.all([
             fetch('./databases/users.json?v=' + timestamp),
             fetch('./databases/projects.json?v=' + timestamp)
         ]);
 
-        if (!usersRes.ok || !gamesRes.ok) throw new Error("Не удалось загрузить базы данных");
+        if (!usersRes.ok || !projectsRes.ok) throw new Error("Не удалось загрузить базы данных");
 
         const usersData = await usersRes.json();
-        const allGames = await gamesRes.json();
+        const allProjects = await projectsRes.json();
 
         // 1. ИЩЕМ И ОТРИСОВЫВАЕМ ДАННЫЕ ОДНОГО ПОЛЬЗОВАТЕЛЯ
         const user = usersData.find(u => u.id === userId);
@@ -1002,7 +1002,7 @@ async function loadDeveloperProfile() {
         }
 
         // 3. СКАН ПУТЕЙ И СБОРКА ПРОЕКТОВ ИМЕННО ЭТОГО РАЗРАБОТЧИКА
-        const authorProjects = allGames.filter(p => p.developer === userId);
+        const authorProjects = allProjects.filter(p => p.developer === userId);
         
         if (projectsCountEl) projectsCountEl.innerText = authorProjects.length;
         projectsGrid.innerHTML = '';
@@ -1016,7 +1016,7 @@ async function loadDeveloperProfile() {
         authorProjects.forEach(project => {
             const card = document.createElement('a');
             card.href = `project-template.html?project=${project.id}`;
-            card.className = 'game-card'; 
+            card.className = 'project-card';
             
             let badgesHTML = '';
             if (project.platforms && Array.isArray(project.platforms)) {
