@@ -159,5 +159,35 @@
       "внутриигровые звуки",
       "исправления ошибок"
     ]
+  },
+  {
+    "id": "kritver",
+    "title": "Kritver",
+    "type": "game",
+    "platforms": ["Windows"],
+    "developer": "dev_kristall",
+    "version": "0.8.0",
+    "price": 0,
+    "downloads": [
+      {
+        "label": "Скачать EXE",
+        "url": "https://github.com/KristallC/Projects/releases/download/games/kritver.0.8.0.exe",
+        "os": "windows",
+        "size": "10 МБ"
+      }
+    ],
+    "short_desc": "Мой первый проект, написанный на Python во время обучения",
+    "full_desc": "Добро пожаловать в первый официальный релиз консольной программы Kritver! Это мой самый первый проект, написанный на Python в PyCharm во время обучения на курсах программирования, и теперь он наконец-то доступен для всех.",
+    "features": [
+      "Консольный интерфейс: Управление полностью происходит через терминал.",
+      "Ретро-код: Оригинальная логика, написанная в детстве на курсах по программированию, сохранена в первозданном виде.",
+      "Python-powered: Простая и понятная кодовая база для тех, кто только начинает изучать Python."
+    ],
+    "show_instruction": true,
+    "instruction_type": "windows",
+    "trailer_url": "",
+    "screenshots": [],
+    "socials": [],
+    "whats_new": []
   }
 ]
