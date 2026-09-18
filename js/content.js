@@ -924,12 +924,12 @@ async function loadCommunityEvents() {
 // 3.Г. ЗАГРУЗКА И СБОРКА ПРОФИЛЯ РАЗРАБОТЧИКА
 // ==========================================
 async function loadDeveloperProfile() {
-    const usernameEl = document.getElementById('dev-username');
-    const bioEl = document.getElementById('dev-bio');
-    const avatarWrapper = document.getElementById('dev-avatar-wrapper');
-    const awardsContainer = document.getElementById('dev-awards-container');
-    const projectsGrid = document.getElementById('dev-projects-grid');
-    const projectsCountEl = document.getElementById('dev-projects-count');
+    const usernameEl = document.getElementById('username');
+    const bioEl = document.getElementById('bio');
+    const avatarWrapper = document.getElementById('avatar-wrapper');
+    const awardsContainer = document.getElementById('awards-container');
+    const projectsGrid = document.getElementById('projects-grid');
+    const projectsCountEl = document.getElementById('projects-count');
 
     if (!usernameEl || !bioEl || !projectsGrid) return;
 
