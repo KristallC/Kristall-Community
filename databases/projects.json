@@ -3,20 +3,11 @@
     "id": "kristallcommunity",
     "title": "KristallCommunity — версии для установки",
     "type": "app",
-    "platforms": [
-      "Android"
-    ],
+    "platforms": ["Android"],
     "developer": "dev_kristall",
     "version": "1.0.0.0",
     "price": 0,
-    "downloads": [
-      {
-        "label": "Скачать APK",
-        "url": "https://github.com/KristallC/Kristall-Community/releases/download/1.0.0.0/Kristall.apk",
-        "os": "android",
-        "size": "1.18 МБ"
-      }
-    ],
+    "downloads": [{"label": "Скачать APK", "url": "https://github.com/KristallC/Kristall-Community/releases/download/1.0.0.0/Kristall.apk", "os": "android", "size": "1.18 МБ"}],
     "short_desc": "Версии KristallCommunity для скачивания.",
     "full_desc": "KristallCommunity — веб-приложение сообщества Kristall, где вы можете: получать свежие новости со всего сообщества, пользоваться каталогом игр и приложений, скупать лимитированные украшения профиля в магазине и многое другое!",
     "features": [
@@ -31,9 +22,7 @@
     "id": "money-empire",
     "title": "Money Empire (скоро Remake)",
     "type": "game",
-    "platforms": [
-      "Android"
-    ],
+    "platforms": ["Android"],
     "developer": "dev_kristall",
     "version": "b1.0.5",
     "price": 0,
@@ -80,9 +69,7 @@
     "id": "kcounter",
     "title": "KCounter — функциональный счётчик",
     "type": "app",
-    "platforms": [
-      "Android"
-    ],
+    "platforms": ["Android"],
     "developer": "dev_kristall",
     "version": "v1.2",
     "price": 0,
@@ -125,15 +112,14 @@
       "исправлены ошибки с кнопками '+' и '-', связанные с неработающими вибрацией и режимом для левшей в горизонтальном режиме",
       "теперь при повороте экрана он не сбрасывается",
       "исправлено выравнивание текста общего счёта"
-    ]
+    ],
+    "is_featured": true
   },
   {
     "id": "war4",
     "title": "War 4 — игра в Roblox",
     "type": "game",
-    "platforms": [
-      "Site"
-    ],
+    "platforms": ["Site"],
     "developer": "dev_kristall",
     "version": "22/08/2026",
     "price": 0,
