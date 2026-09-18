@@ -1,8 +1,8 @@
 const NEWS_URL = './databases/news.json';
-const GAMES_URL = './databases/projects.json'; 
+const PROJECTS_URL = './databases/projects.json'; 
 const USERS_URL = './databases/users.json'; 
 
-let allGamesData = []; 
+let allProjectsData = []; 
 let currentTypeFilter = 'all';
 let currentPlatFilter = 'all';
 let currentUser = JSON.parse(localStorage.getItem('kristall_user')) || null;
