@@ -67,7 +67,7 @@
   },
   {
     "id": "kcounter",
-    "title": "KCounter — функциональный счётчик",
+    "title": "KCounter — многофункциональный счётчик",
     "type": "app",
     "platforms": ["Android"],
     "developer": "dev_kristall",
